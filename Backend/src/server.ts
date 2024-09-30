@@ -1,9 +1,8 @@
-// server
-
 import express from 'express';
 import dotenv from 'dotenv';
+import { Sequelize } from 'sequelize';
 import route from './Routes/route'
-
+import {sequelize}  from './utils/connect'
 
 dotenv.config();
 
