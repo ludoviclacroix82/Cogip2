@@ -1,10 +1,12 @@
-// src/Models/CompanyModels.ts
-import { Sequelize, Model, DataTypes } from 'sequelize'
-import { sequelize } from '../utils/connect' 
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../utils/connect';
+import { Country } from './CountryModels'; // Assurez-vous que le chemin est correct
 
-class Company extends Model {}
+class Company extends Model {
+    
+}
 
-// Initialiser le modèle Company
+// Initialisation du modèle
 Company.init({
     id: {
         type: DataTypes.INTEGER,
@@ -28,30 +30,30 @@ Company.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    created_at: { // Notez le soulignement
+    created_at: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
     },
-    updated_at: { // Notez le soulignement
+    updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
     },
 }, {
-    sequelize,           
-    modelName: 'Company', 
+    sequelize,
+    modelName: 'Company',
     tableName: 'companies',
-    timestamps: false, // Désactive les colonnes `createdAt` et `updatedAt`
-})
+    timestamps: false,
+});
 
 // Fonction pour récupérer toutes les entreprises
 async function getCompanies() {
     const companies = await Company.findAll({
-        order: [[sequelize.fn('length', sequelize.col('name')), 'ASC']],
-    })
+        order: [[sequelize.fn('length', sequelize.col('name')), 'ASC']],       
+    });
 
-    return companies
+    return companies;
 }
 
-export { Company, getCompanies }
+export { Company, getCompanies };
