@@ -1,35 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { Sequelize } from 'sequelize'; // Correct import for Sequelize
-import route from './Routes/route';
+import { Sequelize } from 'sequelize';
+import route from './Routes/route'
+import {sequelize}  from './utils/connect'
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Create a new instance of Sequelize
-const sequelize = new Sequelize(
-    process.env.MYSQL_DB as string,
-    process.env.MYSQL_USER as string,
-    process.env.MYSQL_PWD as string,
-    {
-        dialect: "mysql",
-        host: process.env.MYSQL_HOST as string,
-        port: Number(process.env.MYSQL_PORT), 
-    }
-);
-
-async function testConnection() {
-    try {
-        await sequelize.authenticate();
-        console.log('Connecté à la base de données MySQL!');
-    } catch (error) { 
-        console.error('Impossible de se connecter, erreur suivante :', error);
-    }
-}
-
-testConnection();
 
 app.use('/', route);
 

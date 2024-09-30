@@ -1,28 +1,57 @@
-// src/Models/CompanyModdels
+// src/Models/CompanyModels.ts
+import { Sequelize, Model, DataTypes } from 'sequelize'
+import { sequelize } from '../utils/connect' 
 
-class Companies {
-    public id: number
-    public name: string
-    public type_id: number
-    public country_id: number
-    public tva: string
-    public created_at:Date
-    public updated_at:Date
+class Company extends Model {}
 
-    constructor(id: number,name: string,type_id: number,country_id: number,tva: string,created_at:Date,updated_at:Date) {
-        this.id = id 
-        this.name = name
-        this.type_id = type_id
-        this.country_id = country_id
-        this.tva = tva
-        this.created_at = created_at
-        this.updated_at = updated_at
-    }
+// Initialiser le modèle Company
+Company.init({
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    type_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    country_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    tva: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    created_at: { // Notez le soulignement
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+    },
+    updated_at: { // Notez le soulignement
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+    },
+}, {
+    sequelize,           
+    modelName: 'Company', 
+    tableName: 'companies',
+    timestamps: false, // Désactive les colonnes `createdAt` et `updatedAt`
+})
 
-   public getCompanies = async() =>{
+// Fonction pour récupérer toutes les entreprises
+async function getCompanies() {
+    const companies = await Company.findAll({
+        order: [[sequelize.fn('length', sequelize.col('name')), 'ASC']],
+    })
 
-    
-   }
-
-
+    return companies
 }
+
+export { Company, getCompanies }
