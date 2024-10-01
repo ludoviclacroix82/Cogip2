@@ -10,9 +10,9 @@ class Companies {
     public country_id?: number
     public tva?: string
     public created_at?: Date
-    public updated_at?: Date 
+    public updated_at?: Date
 
-    public pool:any
+    public pool = connectToDatabase()
 
     constructor(name?: string, type_id?: number, country_id?: number, tva?: string, created_at?: Date, updated_at?: Date) {
         this.name = name
@@ -20,25 +20,29 @@ class Companies {
         this.country_id = country_id
         this.tva = tva
         this.created_at = created_at
-        this.updated_at = updated_at 
+        this.updated_at = updated_at
     }
 
-   public async getCompanies(req: Request, res: Response): Promise<void> {
-    this.pool = connectToDatabase()
+    public getCompanies = async (req: Request, res: Response) => {       
 
-    try {
-        const query = "SELECT * FROM companies"
-        const [companies] = await this.pool.query(query)
+        try {
+            const query = `
+                SELECT companies.*, country.name as country , types.name as type
+                FROM companies
+                JOIN country ON companies.country_id = country.id
+                JOIN types ON companies.type_id = types.id`
 
-        console.log('GET Companies');
-        
-        return companies
-    } catch (err) {
-        console.error(err)
-        res.status(500).json({ error: "Internal server error" })
+            const [companies] = await this.pool.query(query)
+
+            console.log('GET Companies');
+
+            return companies
+        } catch (err) {
+            console.error(err)
+            res.status(500).json({ error: "Internal server error" })
+        }
     }
 }
-}
 
-export default Companies 
+export default Companies
 
