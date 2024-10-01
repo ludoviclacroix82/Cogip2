@@ -1,57 +1,44 @@
 // src/Models/CompanyModels.ts
-import { Sequelize, Model, DataTypes } from 'sequelize'
-import { sequelize } from '../utils/connect' 
 
-class Company extends Model {}
+import { Pool } from 'mysql2/promise'
+import { Response, Request } from 'express'
+import connectToDatabase from '../utils/connect'
 
-// Initialiser le modèle Company
-Company.init({
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    type_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    country_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    tva: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    created_at: { // Notez le soulignement
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-    },
-    updated_at: { // Notez le soulignement
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-    },
-}, {
-    sequelize,           
-    modelName: 'Company', 
-    tableName: 'companies',
-    timestamps: false, // Désactive les colonnes `createdAt` et `updatedAt`
-})
+class Companies {
+    public name?: string
+    public type_id?: number
+    public country_id?: number
+    public tva?: string
+    public created_at?: Date
+    public updated_at?: Date 
 
-// Fonction pour récupérer toutes les entreprises
-async function getCompanies() {
-    const companies = await Company.findAll({
-        order: [[sequelize.fn('length', sequelize.col('name')), 'ASC']],
-    })
+    public pool:any
 
-    return companies
+    constructor(name?: string, type_id?: number, country_id?: number, tva?: string, created_at?: Date, updated_at?: Date) {
+        this.name = name
+        this.type_id = type_id
+        this.country_id = country_id
+        this.tva = tva
+        this.created_at = created_at
+        this.updated_at = updated_at 
+    }
+
+   public async getCompanies(req: Request, res: Response): Promise<void> {
+    this.pool = connectToDatabase()
+
+    try {
+        const query = "SELECT * FROM companies"
+        const [companies] = await this.pool.query(query)
+
+        console.log('GET Companies');
+        
+        return companies
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({ error: "Internal server error" })
+    }
+}
 }
 
-export { Company, getCompanies }
+export default Companies 
+

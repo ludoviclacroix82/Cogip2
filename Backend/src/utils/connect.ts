@@ -1,29 +1,35 @@
-// src/utils/connect
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
-dotenv.config();
+import { createPool, Pool } from 'mysql2/promise'
+import dotenv from 'dotenv'
 
-// Create a new instance of Sequelize
-const sequelize = new Sequelize(
-    process.env.MYSQL_DB as string,
-    process.env.MYSQL_USER as string,
-    process.env.MYSQL_PWD as string,
-    {
-        dialect: "mysql",
-        host: process.env.MYSQL_HOST as string,
-        port: Number(process.env.MYSQL_PORT), 
-    }
-);
 
-async function testConnection() {
-    try {
-        await sequelize.authenticate();
-        console.log('Connecté à la base de données MySQL!');
-    } catch (error) { 
-        console.error('Impossible de se connecter, erreur suivante :', error);
-    }
+dotenv.config()
+
+const connectToDatabase = (): Pool => {
+  try {
+    const pool = createPool({
+      host: process.env.MYSQL_HOST,
+      port: parseInt(process.env.MYSQL_PORT || "3306", 10),
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PWD,
+      database: process.env.MYSQL_DB,
+      waitForConnections: true, 
+      connectionLimit: 10,      
+      queueLimit: 0             
+    })
+
+    // pool.getConnection()
+    //   .then(() => {
+    //     console.log('Connected to the MySQL database')
+    //   })
+    //   .catch(err => {
+    //     console.error('Error connecting to the MySQL database:', err)
+    //   })
+
+    return pool 
+  } catch (error) {
+    console.error('Error while setting up the database connection:', error)
+    throw error 
+  }
 }
 
-testConnection();
-
-export {sequelize}
+export default connectToDatabase

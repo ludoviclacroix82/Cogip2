@@ -1,13 +1,17 @@
-// src/Controllers/CompanyControllers
-import { Request, Response } from 'express' // Make sure you import these
-import { Company, getCompanies } from '../Models/CompanyModels'
+// src/Controllers/CompanyControllers.ts
+import { Request, Response } from 'express' 
+import connectToDatabase from '../utils/connect' 
+import Companies from '../Models/CompanyModels';
+
+const pool = connectToDatabase() 
 
 const viewAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const companies = await getCompanies() 
+        const companies = new Companies();
+        const companiesDatas = await companies.getCompanies(req, res) 
         const datas = {
-            companies: companies,
-        };
+            companies: companiesDatas,
+        }
         return res.status(200).json(datas) 
 
     } catch (error: any) {
