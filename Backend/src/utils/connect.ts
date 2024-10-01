@@ -17,14 +17,6 @@ const connectToDatabase = (): Pool => {
       queueLimit: 0             
     })
 
-    // pool.getConnection()
-    //   .then(() => {
-    //     console.log('Connected to the MySQL database')
-    //   })
-    //   .catch(err => {
-    //     console.error('Error connecting to the MySQL database:', err)
-    //   })
-
     return pool 
   } catch (error) {
     console.error('Error while setting up the database connection:', error)

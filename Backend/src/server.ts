@@ -9,6 +9,8 @@ const app = express()
 const PORT = process.env.PORT || 3000
 connectToDatabase()
 
+app.use(express.json())
+
 app.use('/', route)
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
