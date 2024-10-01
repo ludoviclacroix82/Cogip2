@@ -1,8 +1,10 @@
 // src/Models/CompanyModels.ts
 
-import { Pool } from 'mysql2/promise'
 import { Response, Request } from 'express'
 import connectToDatabase from '../utils/connect'
+
+const {formatDate} = require('../utils/utils')
+
 
 class Companies {
     public id?: number
@@ -15,14 +17,13 @@ class Companies {
 
     public pool = connectToDatabase()
 
-    constructor(id?: number, name?: string, type_id?: number, country_id?: number, tva?: string, created_at?: Date, updated_at?: Date) {
-        this.id = id
+    constructor(name?: string, type_id?: number, country_id?: number, tva?: string) {
         this.name = name
         this.type_id = type_id
         this.country_id = country_id
         this.tva = tva
-        this.created_at = created_at
-        this.updated_at = updated_at
+        this.created_at = formatDate(new Date())
+        this.updated_at = formatDate(new Date())
     }
     /**
      * Return data Mysql table companies
@@ -50,18 +51,18 @@ class Companies {
         }
     }
 
-    public getCompany = async (req: Request, res: Response) => {
+    public getCompany = async (id : number,req: Request, res: Response) => {
         try {
             const query = `
                 SELECT companies.*, country.name as country , types.name as type
                 FROM companies
                 JOIN country ON companies.country_id = country.id
                 JOIN types ON companies.type_id = types.id 
-                WHERE companies.id = ${this.id}`
+                WHERE companies.id = ${id}`
 
             const [company] = await this.pool.query(query)
 
-            console.log(`GET Company ID:${this.id}`);
+            console.log(`GET Company ID:${id}`);
             return company
 
         } catch (err) {
@@ -73,11 +74,22 @@ class Companies {
     public postCompany = async (req: Request, res: Response) => {
         try {
 
-            const insertCompagny = `
-                INSERT 
-                INTO companies(id, name, type_id, country_id, tva, created_at, updated_at) 
-                VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]')
-            `
+            const query = `
+            INSERT 
+            INTO companies(name, type_id, country_id, tva, created_at, updated_at) 
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+
+        const [company] = await this.pool.query(query, [
+            this.name,
+            this.type_id,
+            this.country_id,
+            this.tva,
+            this.created_at,
+            this.updated_at
+        ]);
+            console.log(`POST Company ${this.name}`);
+            return company
             
         } catch (error) {
             console.error(error)

@@ -30,8 +30,8 @@ const view = async (req: Request, res: Response) => {
     
     
     try {
-        const company = new Companies(companyId)
-        const companyData = await company.getCompany(req,res)
+        const company = new Companies()
+        const companyData = await company.getCompany(companyId,req,res)
         return res.status(200).json(companyData)
         
     } catch (error) {
@@ -49,11 +49,24 @@ const create = async (req: Request, res: Response) => {
         return res.status(400).send(error.details);
     }
 
-
+    try {
+        const company = new Companies(
+            value.name,
+            value.type_id,
+            value.country_id,
+            value.tva
+        )
+        const companyData = await company.postCompany(req,res)
+        return res.status(200).json(companyData)
+        
+    } catch (error) {
+        console.error("Error fetching company:", error)
+        return res.status(500).json({ error: 'An error occurred while fetching company' })
+    }
 
     console.log('Post Company');
 
-    return res.status(201).json({ message: 'Company created successfully', data: value.name });
-};
+    return res.status(201).json({ message: 'Company created successfully', data: value });
+}
 
 export { viewAll ,view ,create }
