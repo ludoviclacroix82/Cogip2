@@ -2,6 +2,7 @@
 
 import { Response, Request } from 'express'
 import connectToDatabase from '../utils/connect'
+import { log } from 'console'
 
 const {formatDate} = require('../utils/utils')
 
@@ -52,7 +53,8 @@ class Companies {
     }
 
     public getCompany = async (id : number,req: Request, res: Response) => {
-        try {
+        try {`
+            `
             const query = `
                 SELECT companies.*, country.name as country , types.name as type
                 FROM companies
@@ -62,7 +64,7 @@ class Companies {
 
             const [company] = await this.pool.query(query)
 
-            console.log(`GET Company ID:${id}`);
+            console.log(`GET Company ID:${id}`)
             return company
 
         } catch (err) {
@@ -74,11 +76,22 @@ class Companies {
     public postCompany = async (req: Request, res: Response) => {
         try {
 
+            // const queryCompanyIsExist = `SELECT companies.name,companies.tva
+            // FROM companies
+            // WHERE companies.tva = "${this.tva}"`
+
+            // const [companyIsExist] = await this.pool.query(queryCompanyIsExist)
+
+
+            // if(companyIsExist){
+            //     log(companyIsExist)
+            //     return 'isExist'                               
+            // }
+
             const query = `
             INSERT 
             INTO companies(name, type_id, country_id, tva, created_at, updated_at) 
-            VALUES (?, ?, ?, ?, ?, ?)
-        `;
+            VALUES (?, ?, ?, ?, ?, ?)`
 
         const [company] = await this.pool.query(query, [
             this.name,
@@ -87,8 +100,8 @@ class Companies {
             this.tva,
             this.created_at,
             this.updated_at
-        ]);
-            console.log(`POST Company ${this.name}`);
+        ])
+            console.log(`POST Company ${this.name}`)
             return company
             
         } catch (error) {

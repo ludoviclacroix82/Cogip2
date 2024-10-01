@@ -57,7 +57,10 @@ const create = async (req: Request, res: Response) => {
             value.tva
         )
         const companyData = await company.postCompany(req,res)
-        return res.status(200).json(companyData)
+        // if(companyData == "isExist")
+        //     return res.status(409).json({ error: "L'entreprise existe déjà avec ce numéro de TVA." })
+        // else
+            return res.status(201).json({ message: 'Company created successfully', data: value });
         
     } catch (error) {
         console.error("Error fetching company:", error)
