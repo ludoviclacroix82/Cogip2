@@ -51,7 +51,13 @@ class Companies {
             res.status(500).json({ error: "Internal server error" })
         }
     }
-
+    /**
+     * Return data Mysql table companies =>id
+     * @param id company
+     * @param req 
+     * @param res 
+     * @returns data company
+     */
     public getCompany = async (id: number, req: Request, res: Response): Promise<QueryResult | undefined> => {
         try {
 
@@ -72,7 +78,12 @@ class Companies {
             res.status(500).json({ error: "Internal server error" })
         }
     }
-
+    /**
+     * Created company in te mysql tabale companies
+     * @param req 
+     * @param res 
+     * @returns Return company data or indicate that it exists if the company is found in the companies table
+     */
     public postCompany = async (req: Request, res: Response): Promise<QueryResult | "isExist" | undefined> => {
         try {
 
@@ -103,7 +114,13 @@ class Companies {
             res.status(500).json({ error: "Internal server error" })
         }
     }
-
+    /**
+     * delete de company with id 
+     * @param id  company
+     * @param req 
+     * @param res 
+     * @returns Return company data or indicate that the company does not exist if the company is not found in the companies table.
+     */
     public deleteCompany = async (id:number , req: Request, res: Response): Promise<QueryResult | "isNotExist" | undefined> => {
 
         try {
@@ -119,7 +136,7 @@ class Companies {
             WHERE id = ?`
 
             const [company] = await this.pool.query(query, [id])
-            
+
             console.log(`DEKLETE Company ID:${id}`)
             return company
 
@@ -128,7 +145,12 @@ class Companies {
             res.status(500).json({ error: "Internal server error" })
         }
     }
-
+    /**
+     * Check if the company exist with de tva or id 
+     * @param tva in the company
+     * @param id ithe company
+     * @returns data company
+     */
     public isExist = async (tva?: any, id?: number): Promise<QueryResult> => {
 
         const queryCompanyIsExist = `

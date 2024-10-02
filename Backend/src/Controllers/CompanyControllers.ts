@@ -1,16 +1,11 @@
 // src/Controllers/CompanyControllers.ts
 import { Request, Response } from 'express'
-import connectToDatabase from '../utils/connect'
-import Companies from '../Models/CompanyModels';
-import Joi from 'joi'
+import Companies from '../Models/CompanyModels'
 import {validatorCompany} from '../utils/validator'
-import { QueryResult } from 'mysql2';
-
-const pool = connectToDatabase()
 
 const viewAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const companies = new Companies();
+        const companies = new Companies()
         const companiesDatas = await companies.getCompanies(req, res)
         const datas = {
             companies: companiesDatas,
@@ -42,10 +37,10 @@ const view = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
     
-    const { error, value } = validatorCompany(req.body);
+    const { error, value } = validatorCompany(req.body)
 
     if (error) {
-        return res.status(400).send(error.details);
+        return res.status(400).send(error.details)
     }
 
     try {
@@ -60,7 +55,7 @@ const create = async (req: Request, res: Response) => {
         if(companyData === "isExist")
             return res.status(409).json({ error: "L'entreprise existe déjà avec ce numéro de TVA." })
         
-        return res.status(201).json({ message: 'Company created successfully', data: value });
+        return res.status(201).json({ message: 'Company created successfully', data: value })
         
     } catch (error) {
         console.error("Error fetching company:", error)
@@ -80,7 +75,7 @@ const deleteCompany = async (req :Request , res:Response) =>{
         if(companyData === "isNotExist")
             return res.status(409).json({ error: "L'entreprise n'existe pas! " })
         
-        return res.status(201).json({ message: 'Company Deleted successfully' });   
+        return res.status(201).json({ message: 'Company Deleted successfully' })   
         
     } catch (error) {
         console.error("Error fetching company:", error)
