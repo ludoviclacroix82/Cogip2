@@ -1,24 +1,58 @@
 // src/Controllers/CountryControllers
-import {Request , Response} from 'express'
+import { Request, Response } from 'express'
 import Country from '../Models/CountryModels'
 
-const viewAll =  async (req:Request , res:Response) => {
+const { validatorCountry } = require('../utils/validator')
+
+const viewAll = async (req: Request, res: Response) => {
 
     try {
-        
-        const country = await new Country().getCountries(req,res)
 
+        const countries = await new Country().getCountries(req, res)
         const datas = {
-            countries : country
+            countries: countries
         }
-
         res.status(200).json(datas)
 
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: "Internal server error" })        
+        res.status(500).json({ error: "Internal server error" })
     }
-
 }
 
-export {viewAll}
+const view = async (req: Request, res: Response) => {
+
+    try {
+        const { id } = req.params
+        const companyId = parseInt(id)
+
+        const country = await new Country().getCountry(companyId, req, res)
+
+        res.status(200).json(country)
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: "Internal server error" })
+    }
+}
+
+const create = async (req: Request, res: Response) => {
+
+    const { error, value } = validatorCountry(req.body)
+
+    if (error) {
+        return res.status(400).send(error.details)
+    }
+
+    const country = await new Country(
+        value.name,
+        value.initials,
+    ).create(req, res)
+
+    if(country === "isExist")
+        return res.status(409).json({ error: "Le pays existe déjà !" })
+    
+    return res.status(201).json({ message: 'Country created successfully', data: value })
+}
+
+export { viewAll, view, create }

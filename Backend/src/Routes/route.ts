@@ -20,6 +20,9 @@ router.delete('/companies/:id',CompanyControllers.deleteCompany)
 
 // Route Countries
 
-router.get('/countries',CountryControllers.viewAll);
+router.get('/countries',CountryControllers.viewAll)
+router.get('/countries/:id',CountryControllers.view)
+
+router.post('/countries/view',CountryControllers.create)
 
 export default router
