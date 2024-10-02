@@ -2,10 +2,9 @@
 
 import { Response, Request } from 'express'
 import connectToDatabase from '../utils/connect'
-import { log } from 'console'
-import { number } from 'joi'
+import { QueryResult } from 'mysql2'
 
-const {formatDate} = require('../utils/utils')
+const { formatDate } = require('../utils/utils')
 
 
 class Companies {
@@ -33,7 +32,7 @@ class Companies {
      * @param res responce
      * @returns datas companies
      */
-    public getCompanies = async (req: Request, res: Response) => {
+    public getCompanies = async (req: Request, res: Response): Promise<QueryResult | undefined> => {
 
         try {
             const query = `
@@ -53,9 +52,9 @@ class Companies {
         }
     }
 
-    public getCompany = async (id : number,req: Request, res: Response) => {
-        try {`
-            `
+    public getCompany = async (id: number, req: Request, res: Response): Promise<QueryResult | undefined> => {
+        try {
+
             const query = `
                 SELECT companies.*, country.name as country , types.name as type
                 FROM companies
@@ -63,7 +62,7 @@ class Companies {
                 JOIN types ON companies.type_id = types.id 
                 WHERE companies.id = ?`
 
-            const [company] = await this.pool.query(query,[id])
+            const [company] = await this.pool.query(query, [id])
 
             console.log(`GET Company ID:${id}`)
             return company
@@ -74,57 +73,71 @@ class Companies {
         }
     }
 
-    public postCompany = async (req: Request, res: Response) => {
+    public postCompany = async (req: Request, res: Response): Promise<QueryResult | "isExist" | undefined> => {
         try {
 
             const isExistCompany = await this.isExist(this.tva)
 
-            if (Array.isArray(isExistCompany) && isExistCompany.length > 0) { 
-                return 'isExist'                               
+            if (Array.isArray(isExistCompany) && isExistCompany.length > 0) {
+                return 'isExist'
             }
-            console.log( 'test:' + this.isExist(this.tva) )
-            
+
             const query = `
             INSERT 
             INTO companies(name, type_id, country_id, tva, created_at, updated_at) 
             VALUES (?, ?, ?, ?, ?, ?)`
 
-        const [company] = await this.pool.query(query, [
-            this.name,
-            this.type_id,
-            this.country_id,
-            this.tva,
-            this.created_at,
-            this.updated_at
-        ])
+            const [company] = await this.pool.query(query, [
+                this.name,
+                this.type_id,
+                this.country_id,
+                this.tva,
+                this.created_at,
+                this.updated_at
+            ])
             console.log(`POST Company ${this.name}`)
             return company
-            
+
         } catch (error) {
             console.error(error)
             res.status(500).json({ error: "Internal server error" })
         }
     }
 
-    public deleteCOmpany = async ( req:Request , res:Response) =>{
+    public deleteCompany = async (id:number , req: Request, res: Response): Promise<QueryResult | "isNotExist" | undefined> => {
 
         try {
+            const isExistCompany = await this.isExist('',id)
+
+            if (Array.isArray(isExistCompany) && isExistCompany.length === 0) {
+                return 'isNotExist'               
+            }
+
+            const query = `
+            DELETE 
+            FROM companies 
+            WHERE id = ?`
+
+            const [company] = await this.pool.query(query, [id])
             
+            console.log(`DEKLETE Company ID:${id}`)
+            return company
+
         } catch (error) {
             console.error(error)
             res.status(500).json({ error: "Internal server error" })
         }
     }
 
-    public isExist = async (tva:any) =>{
+    public isExist = async (tva?: any, id?: number): Promise<QueryResult> => {
 
         const queryCompanyIsExist = `
                 SELECT companies.name,companies.tva
                 FROM companies
-                WHERE companies.tva = ?`;
+                WHERE companies.tva = ? OR companies.id = ?`;
 
-            const [isExist] = await this.pool.query(queryCompanyIsExist, [tva]);
-        
+        const [isExist] = await this.pool.query(queryCompanyIsExist, [tva, id]);
+
         return isExist
 
     }

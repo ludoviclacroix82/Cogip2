@@ -15,5 +15,6 @@ router.get('/companies',CompanyController.viewAll)
 router.get('/companies/:id',CompanyController.view)
 
 router.post('/companies/view', CompanyController.create)
+router.delete('/companies/:id',CompanyController.deleteCompany)
 
 export default router

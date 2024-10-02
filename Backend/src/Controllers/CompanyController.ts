@@ -4,6 +4,7 @@ import connectToDatabase from '../utils/connect'
 import Companies from '../Models/CompanyModels';
 import Joi from 'joi'
 import {validatorCompany} from '../utils/validator'
+import { QueryResult } from 'mysql2';
 
 const pool = connectToDatabase()
 
@@ -25,9 +26,7 @@ const viewAll = async (req: Request, res: Response): Promise<Response> => {
 const view = async (req: Request, res: Response) => {
 
     const { id } = req.params
-    const companyId = parseInt(id)
-    console.log(companyId)
-    
+    const companyId = parseInt(id)   
     
     try {
         const company = new Companies()
@@ -56,23 +55,37 @@ const create = async (req: Request, res: Response) => {
             value.country_id,
             value.tva
         )
-        const companyData = await company.postCompany(req,res)
-        //console.log(companyData)
-        
+        const companyData = await company.postCompany(req,res)      
 
         if(companyData === "isExist")
             return res.status(409).json({ error: "L'entreprise existe déjà avec ce numéro de TVA." })
-        else
-            return res.status(201).json({ message: 'Company created successfully', data: value });
+        
+        return res.status(201).json({ message: 'Company created successfully', data: value });
         
     } catch (error) {
         console.error("Error fetching company:", error)
         return res.status(500).json({ error: 'An error occurred while fetching company' })
     }
-
-    // console.log('Post Company');
-
-    // return res.status(201).json({ message: 'Company created successfully', data: value });
 }
 
-export { viewAll ,view ,create }
+const deleteCompany = async (req :Request , res:Response) =>{
+   
+    const { id } = req.params
+    const companyId = parseInt(id)
+
+    try {
+
+        const companyData = await new Companies().deleteCompany(companyId,req,res)
+
+        if(companyData === "isNotExist")
+            return res.status(409).json({ error: "L'entreprise n'existe pas! " })
+        
+        return res.status(201).json({ message: 'Company Deleted successfully' });   
+        
+    } catch (error) {
+        console.error("Error fetching company:", error)
+        return res.status(500).json({ error: 'An error occurred while fetching company' })
+    }
+}
+
+export { viewAll ,view ,create, deleteCompany }
