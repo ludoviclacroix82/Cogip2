@@ -57,9 +57,12 @@ const create = async (req: Request, res: Response) => {
             value.tva
         )
         const companyData = await company.postCompany(req,res)
-        // if(companyData == "isExist")
-        //     return res.status(409).json({ error: "L'entreprise existe déjà avec ce numéro de TVA." })
-        // else
+        //console.log(companyData)
+        
+
+        if(companyData === "isExist")
+            return res.status(409).json({ error: "L'entreprise existe déjà avec ce numéro de TVA." })
+        else
             return res.status(201).json({ message: 'Company created successfully', data: value });
         
     } catch (error) {
@@ -67,9 +70,9 @@ const create = async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'An error occurred while fetching company' })
     }
 
-    console.log('Post Company');
+    // console.log('Post Company');
 
-    return res.status(201).json({ message: 'Company created successfully', data: value });
+    // return res.status(201).json({ message: 'Company created successfully', data: value });
 }
 
 export { viewAll ,view ,create }

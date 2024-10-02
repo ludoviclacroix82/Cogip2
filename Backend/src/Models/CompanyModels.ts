@@ -3,6 +3,7 @@
 import { Response, Request } from 'express'
 import connectToDatabase from '../utils/connect'
 import { log } from 'console'
+import { number } from 'joi'
 
 const {formatDate} = require('../utils/utils')
 
@@ -60,9 +61,9 @@ class Companies {
                 FROM companies
                 JOIN country ON companies.country_id = country.id
                 JOIN types ON companies.type_id = types.id 
-                WHERE companies.id = ${id}`
+                WHERE companies.id = ?`
 
-            const [company] = await this.pool.query(query)
+            const [company] = await this.pool.query(query,[id])
 
             console.log(`GET Company ID:${id}`)
             return company
@@ -76,18 +77,17 @@ class Companies {
     public postCompany = async (req: Request, res: Response) => {
         try {
 
-            // const queryCompanyIsExist = `SELECT companies.name,companies.tva
-            // FROM companies
-            // WHERE companies.tva = "${this.tva}"`
+            const queryCompanyIsExist = `
+                SELECT companies.name,companies.tva
+                FROM companies
+                WHERE companies.tva = ?`;
 
-            // const [companyIsExist] = await this.pool.query(queryCompanyIsExist)
+            const [isExist] = await this.pool.query(queryCompanyIsExist, [this.tva]);
 
-
-            // if(companyIsExist){
-            //     log(companyIsExist)
-            //     return 'isExist'                               
-            // }
-
+            if (Array.isArray(isExist) && isExist.length > 0) {
+                return 'isExist'                               
+            }
+            
             const query = `
             INSERT 
             INTO companies(name, type_id, country_id, tva, created_at, updated_at) 
