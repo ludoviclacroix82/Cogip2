@@ -77,16 +77,12 @@ class Companies {
     public postCompany = async (req: Request, res: Response) => {
         try {
 
-            const queryCompanyIsExist = `
-                SELECT companies.name,companies.tva
-                FROM companies
-                WHERE companies.tva = ?`;
+            const isExistCompany = await this.isExist(this.tva)
 
-            const [isExist] = await this.pool.query(queryCompanyIsExist, [this.tva]);
-
-            if (Array.isArray(isExist) && isExist.length > 0) {
+            if (Array.isArray(isExistCompany) && isExistCompany.length > 0) { 
                 return 'isExist'                               
             }
+            console.log( 'test:' + this.isExist(this.tva) )
             
             const query = `
             INSERT 
@@ -108,6 +104,29 @@ class Companies {
             console.error(error)
             res.status(500).json({ error: "Internal server error" })
         }
+    }
+
+    public deleteCOmpany = async ( req:Request , res:Response) =>{
+
+        try {
+            
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({ error: "Internal server error" })
+        }
+    }
+
+    public isExist = async (tva:any) =>{
+
+        const queryCompanyIsExist = `
+                SELECT companies.name,companies.tva
+                FROM companies
+                WHERE companies.tva = ?`;
+
+            const [isExist] = await this.pool.query(queryCompanyIsExist, [tva]);
+        
+        return isExist
+
     }
 }
 
