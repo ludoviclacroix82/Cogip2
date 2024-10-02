@@ -55,4 +55,17 @@ const create = async (req: Request, res: Response) => {
     return res.status(201).json({ message: 'Country created successfully', data: value })
 }
 
-export { viewAll, view, create }
+const deleteCountry =  async ( req:Request , res:Response) =>{
+
+    const {id} = req.params
+    const countryId = parseInt(id)
+
+    const country = await new Country().deleteCountry(countryId,req,res)
+
+    if(country === "isNotExist" )
+            return res.status(400).json({message : `the country id #${id} is not exist ! `})
+
+    return res.status(200).json({message: 'Country deleted successfully !'})
+}
+
+export { viewAll, view, create , deleteCountry }

@@ -69,7 +69,6 @@ const deleteCompany = async (req :Request , res:Response) =>{
     const companyId = parseInt(id)
 
     try {
-
         const companyData = await new Companies().deleteCompany(companyId,req,res)
 
         if(companyData === "isNotExist")

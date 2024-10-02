@@ -24,5 +24,6 @@ router.get('/countries',CountryControllers.viewAll)
 router.get('/countries/:id',CountryControllers.view)
 
 router.post('/countries/view',CountryControllers.create)
+router.delete('/countries/:id',CountryControllers.deleteCountry)
 
 export default router
