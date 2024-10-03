@@ -71,6 +71,9 @@ class Country {
 
             const isExistCountry = await this.isExist(this.initials,0) as any
 
+            if( isExistCountry.length > 0)
+                return res.status(409).json({message : "This country exist !"})
+
             const query = `
                 INSERT 
                 INTO country(name,initials,created_at,updated_at) 
@@ -91,8 +94,6 @@ class Country {
             }
             console.log(`POST Country ${this.name}`)
             
-            if( isExistCountry.length > 0)
-                return res.status(409).json({message : "This country exist !"})
 
             return res.status(200).json({message : "Country create successfully " , data:data})
 
@@ -106,6 +107,9 @@ class Country {
         try {
 
             const isExistCountry =  await this.isExist('',id) as any
+            
+            if(isExistCountry.length === 0)
+                return res.status(400).json({message : `the country id #${id} is not exist ! `})
 
             const query = `
                 DELETE 
@@ -116,8 +120,6 @@ class Country {
 
             console.log(`DELETE Country id ${id}`)
 
-            if(isExistCountry.length === 0)
-                return res.status(400).json({message : `the country id #${id} is not exist ! `})
 
             return res.status(200).json({message: 'Country deleted successfully !'})
             

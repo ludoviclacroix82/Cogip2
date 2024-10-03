@@ -92,6 +92,9 @@ class Companies {
 
             const isExistCompany = await this.isExist(this.tva) as any
 
+            if(isExistCompany.length > 0)
+                return res.status(409).json({ error: `La TVA est déjà enregistrée pour #${isExistCompany.id} ${isExistCompany.name} ` })
+
             const query = `
             INSERT 
             INTO companies(name, type_id, country_id, tva, created_at, updated_at) 
@@ -116,8 +119,6 @@ class Companies {
                 updated_at : this.created_at,
             }
 
-            if(isExistCompany.length === 0)
-                return res.status(409).json({ error: `La TVA est déjà enregistrée pour #${isExistCompany.id} ${isExistCompany.name} ` })
             
             return res.status(201).json({ message: 'Company created successfully', data: data })
 
@@ -126,6 +127,29 @@ class Companies {
             res.status(500).json({ error: "Internal server error" })
         }
     }
+
+    public updateCompany =  async (id:number,data:any,  req:Request , res:Response) =>{
+
+        const isExistCompany = await this.isExist('',id) as any         
+
+        if(isExistCompany.length === 0)
+            return res.status(400).json({message: "Company no found!"})
+
+        data.updated_at = this.updated_at
+        const fields = Object.keys(data).map(key => `${key} = ?`).join(', ')        
+
+        const query = `
+            UPDATE companies
+            SET ${fields}
+            WHERE id = ?
+        `        
+        const copanyUpdate = await this.pool.query(query,[...Object.values(data), id])
+
+        console.log(`Patch company #${id}`)  
+        return res.status(200).json({message :  `Company #${id} update successsfully!`, data : data})
+
+    }
+
     /**
      * delete de company with id 
      * @param id  company
@@ -134,9 +158,12 @@ class Companies {
      * @returns Return company data or indicate that the company does not exist if the company is not found in the companies table.
      */
     public deleteCompany = async (id:number , req: Request, res: Response): Promise<any> => {
-
+        
         try {
             const isExistCompany = await this.isExist('',id) as any
+            
+            if(isExistCompany.length === 0)
+                return res.status(400).json({ error: "L'entreprise n'existe pas! " })
 
             const query = `
             DELETE 
@@ -146,8 +173,6 @@ class Companies {
             const [company] = await this.pool.query(query, [id])
 
             console.log(`DEKLETE Company ID:${id}`)
-            if(isExistCompany.length === 0)
-                return res.status(400).json({ error: "L'entreprise n'existe pas! " })
             
             return res.status(201).json({ message: 'Company Deleted successfully' })  
 

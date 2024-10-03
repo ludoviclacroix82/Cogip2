@@ -84,6 +84,57 @@ router.get('/companies/:id',CompanyControllers.view)
  *         description: The VAT is already recorded for a company. 
  */
 router.post('/companies', CompanyControllers.create)
+
+/**
+ * @openapi
+ * /companies/{id}:
+ *   patch:
+ *     tags:
+ *       - Companies
+ *     description: Update company with the specified ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: ID of the company
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Company name
+ *                 example: "My Company"  # Example value
+ *                 required: false
+ *               type_id:
+ *                 type: integer
+ *                 description: ID of the type of company [client, supplier, etc.]
+ *                 example: 1  # Example value
+ *                 required: false
+ *               country_id:
+ *                 type: integer
+ *                 description: ID of the country of the company [fr, be, etc.]
+ *                 example: 33  # Example value
+ *                 required: false
+ *               tva:
+ *                 type: string
+ *                 description: VAT number of the company
+ *                 example: "FR123456789"  # Example value
+ *                 required: false
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Company not found        
+ */
+
+router.patch('/companies/:id',CompanyControllers.update)
+
 /**
  * @openapi
  * /companies/{id}:
