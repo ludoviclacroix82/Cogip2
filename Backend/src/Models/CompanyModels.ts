@@ -127,7 +127,14 @@ class Companies {
             res.status(500).json({ error: "Internal server error" })
         }
     }
-
+    /**
+     * Update company with ID
+     * @param id ID company for Update [params]
+     * @param data data requestBody
+     * @param req 
+     * @param res 
+     * @returns return 200 is sucess + data / return 400 is company Id no found
+     */
     public updateCompany =  async (id:number,data:any,  req:Request , res:Response) =>{
 
         const isExistCompany = await this.isExist('',id) as any         
