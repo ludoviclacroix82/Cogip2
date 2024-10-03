@@ -5,12 +5,8 @@ import {validatorCompany} from '../utils/validator'
 
 const viewAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const companies = new Companies()
-        const companiesDatas = await companies.getCompanies(req, res)
-        const datas = {
-            companies: companiesDatas,
-        }
-        return res.status(200).json(datas)
+        const companies = await new Companies().getCompanies(req, res)
+        return companies
 
     } catch (error: any) {
         console.error("Error fetching companies:", error)
@@ -24,9 +20,8 @@ const view = async (req: Request, res: Response) => {
     const companyId = parseInt(id)   
     
     try {
-        const company = new Companies()
-        const companyData = await company.getCompany(companyId,req,res)
-        return res.status(200).json(companyData)
+        const company = await new Companies().getCompany(companyId,req,res)
+        return company
         
     } catch (error) {
         console.error("Error fetching company:", error)
@@ -50,12 +45,9 @@ const create = async (req: Request, res: Response) => {
             value.country_id,
             value.tva
         )
-        const companyData = await company.postCompany(req,res)      
+        const companyCreated = await company.postCompany(req,res)      
 
-        if(companyData === "isExist")
-            return res.status(409).json({ error: "L'entreprise existe déjà avec ce numéro de TVA." })
-        
-        return res.status(201).json({ message: 'Company created successfully', data: value })
+        return companyCreated
         
     } catch (error) {
         console.error("Error fetching company:", error)
@@ -69,12 +61,8 @@ const deleteCompany = async (req :Request , res:Response) =>{
     const companyId = parseInt(id)
 
     try {
-        const companyData = await new Companies().deleteCompany(companyId,req,res)
-
-        if(companyData === "isNotExist")
-            return res.status(409).json({ error: "L'entreprise n'existe pas! " })
-        
-        return res.status(201).json({ message: 'Company Deleted successfully' })   
+        const companyDelete = await new Companies().deleteCompany(companyId,req,res)       
+        return companyDelete 
         
     } catch (error) {
         console.error("Error fetching company:", error)

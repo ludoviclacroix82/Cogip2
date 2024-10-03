@@ -12,18 +12,187 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // Route companies 
+/**
+ * @openapi
+ * /companies:
+ *   get: 
+ *     tags:
+ *       - Companies
+ *     description: Get all companies
+ *     responses: 
+ *       200: 
+ *         description: Success
+ */
 router.get('/companies',CompanyControllers.viewAll)
+
+/**
+ * @openapi
+ * /companies/{id}:
+ *   get:
+ *     tags:
+ *       - Companies
+ *     description: Get a company by its ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the company to retrieve
+ *         schema:
+ *           type: integer
+ *     responses: 
+ *       200: 
+ *         description: Success
+ *       404:
+ *         description: Company not found
+ */
 router.get('/companies/:id',CompanyControllers.view)
 
-router.post('/companies/view', CompanyControllers.create)
+/**
+ * @openapi
+ * /companies:
+ *   post:
+ *     tags:
+ *       - Companies
+ *     description: Create a new Company
+ *     requestBody:  
+ *       required: true
+ *       content:
+ *         application/json:  
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Company name
+ *                 example: "My Company"  # Exemple de valeur
+ *               type_id:
+ *                 type: integer
+ *                 description: ID Type of company [client ....]
+ *                 example: 1  # Exemple de valeur
+ *               country_id:
+ *                 type: integer
+ *                 description: ID Country of company [fr, be .....]
+ *                 example: 33  # Exemple de valeur
+ *               tva:
+ *                 type: string
+ *                 description: VAT of the company
+ *                 example: "FR123456789"  # Exemple de valeur
+ *     responses: 
+ *       201: 
+ *         description: Success
+ *       409:
+ *         description: The VAT is already recorded for a company. 
+ */
+router.post('/companies', CompanyControllers.create)
+/**
+ * @openapi
+ * /companies/{id}:
+ *  delete:
+ *   tags:
+ *    - Companies
+ *   description : Delete Company whit ID
+ *   parameters:
+ *    - name: id
+ *      in: path
+ *      required: true
+ *      description: The ID of the company to retrieve
+ *      schema:
+ *        type: integer
+ *   responses: 
+ *     200: 
+ *       description: Success
+ *     404:
+ *       description: Company not found    
+ */
 router.delete('/companies/:id',CompanyControllers.deleteCompany)
 
 // Route Countries
 
+/**
+ * @openapi
+ * /countries:
+ *   get:
+ *    tags:
+ *     - Countries
+ *    description: Get All coutries
+ *    responses:
+ *     200:
+ *       description: sucess
+ */
 router.get('/countries',CountryControllers.viewAll)
+
+/**
+ * @openapi
+ * /countries/{id}:
+ *   get:
+ *     tags: 
+ *       - Countries
+ *     description: Get Country with ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Id of the Country
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Country not found
+ */
 router.get('/countries/:id',CountryControllers.view)
 
-router.post('/countries/view',CountryControllers.create)
+/**
+ * @openapi
+ * /countries:
+ *   post:
+ *     tags:
+ *       - Countries
+ *     description: Créer un pays
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Nom du pays
+ *                 example: "Mon Pays"  # Exemple de valeur
+ *               initials:
+ *                 type: string
+ *                 description: Initiales du pays
+ *                 example: "In"  # Exemple de valeur
+ *     responses:  
+ *       200:
+ *         description: Succès 
+ *       409:
+ *         description: The country Exist !  
+ */
+
+router.post('/countries',CountryControllers.create)
+
+/**
+ * @openapi
+ * /countries/{id}:
+ *   delete:
+ *     tags:
+ *       - Countries
+ *     description:  Delete Country with ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: Id country
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Sucess
+ *       400:
+ *         description: Coutry no found
+ */
 router.delete('/countries/:id',CountryControllers.deleteCountry)
 
 export default router

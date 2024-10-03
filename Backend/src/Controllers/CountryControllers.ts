@@ -9,10 +9,7 @@ const viewAll = async (req: Request, res: Response) => {
     try {
 
         const countries = await new Country().getCountries(req, res)
-        const datas = {
-            countries: countries
-        }
-        res.status(200).json(datas)
+        return countries
 
     } catch (error) {
         console.error(error)
@@ -27,8 +24,7 @@ const view = async (req: Request, res: Response) => {
         const companyId = parseInt(id)
 
         const country = await new Country().getCountry(companyId, req, res)
-
-        res.status(200).json(country)
+        return country
 
     } catch (error) {
         console.error(error)
@@ -49,10 +45,7 @@ const create = async (req: Request, res: Response) => {
         value.initials,
     ).create(req, res)
 
-    if(country === "isExist")
-        return res.status(409).json({ error: "Le pays existe déjà !" })
-    
-    return res.status(201).json({ message: 'Country created successfully', data: value })
+    return country
 }
 
 const deleteCountry =  async ( req:Request , res:Response) =>{
@@ -62,10 +55,8 @@ const deleteCountry =  async ( req:Request , res:Response) =>{
 
     const country = await new Country().deleteCountry(countryId,req,res)
 
-    if(country === "isNotExist" )
-            return res.status(400).json({message : `the country id #${id} is not exist ! `})
+    return country
 
-    return res.status(200).json({message: 'Country deleted successfully !'})
 }
 
 export { viewAll, view, create , deleteCountry }

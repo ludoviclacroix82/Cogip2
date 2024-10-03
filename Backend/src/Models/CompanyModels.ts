@@ -2,7 +2,6 @@
 
 import { Response, Request } from 'express'
 import connectToDatabase from '../utils/connect'
-import { QueryResult } from 'mysql2'
 
 const { formatDate } = require('../utils/utils')
 
@@ -32,7 +31,7 @@ class Companies {
      * @param res responce
      * @returns datas companies
      */
-    public getCompanies = async (req: Request, res: Response): Promise<QueryResult | undefined> => {
+    public getCompanies = async (req: Request, res: Response): Promise<any> => {
 
         try {
             const query = `
@@ -44,7 +43,7 @@ class Companies {
             const [companies] = await this.pool.query(query)
 
             console.log('GET Companies')
-            return companies
+            return res.status(200).json({companies : companies})
 
         } catch (err) {
             console.error(err)
@@ -58,7 +57,7 @@ class Companies {
      * @param res 
      * @returns data company
      */
-    public getCompany = async (id: number, req: Request, res: Response): Promise<QueryResult | undefined> => {
+    public getCompany = async (id: number, req: Request, res: Response): Promise<any> => {
         try {
 
             const query = `
@@ -68,10 +67,14 @@ class Companies {
                 JOIN types ON companies.type_id = types.id 
                 WHERE companies.id = ?`
 
-            const [company] = await this.pool.query(query, [id])
+            const [rows] = await this.pool.query(query, [id]) as any
 
             console.log(`GET Company ID:${id}`)
-            return company
+            
+            if(rows.length == 0)
+                return res.status(400).json({message : 'Company non found!'})
+
+            return res.status(200).json(rows)
 
         } catch (err) {
             console.error(err)
@@ -84,14 +87,10 @@ class Companies {
      * @param res 
      * @returns Return company data or indicate that it exists if the company is found in the companies table
      */
-    public postCompany = async (req: Request, res: Response): Promise<QueryResult | "isExist" | undefined> => {
+    public postCompany = async (req: Request, res: Response): Promise<any> => {
         try {
 
-            const isExistCompany = await this.isExist(this.tva)
-
-            if (Array.isArray(isExistCompany) && isExistCompany.length > 0) {
-                return 'isExist'
-            }
+            const isExistCompany = await this.isExist(this.tva) as any
 
             const query = `
             INSERT 
@@ -107,7 +106,20 @@ class Companies {
                 this.updated_at
             ])
             console.log(`POST Company ${this.name}`)
-            return company
+           
+            const data = {
+                name:this.name,
+                type_id : this.type_id,
+                country_id : this.country_id, 
+                tva : this.tva,
+                created_at : this.created_at,
+                updated_at : this.created_at,
+            }
+
+            if(isExistCompany.length === 0)
+                return res.status(409).json({ error: `La TVA est déjà enregistrée pour #${isExistCompany.id} ${isExistCompany.name} ` })
+            
+            return res.status(201).json({ message: 'Company created successfully', data: data })
 
         } catch (error) {
             console.error(error)
@@ -121,14 +133,10 @@ class Companies {
      * @param res 
      * @returns Return company data or indicate that the company does not exist if the company is not found in the companies table.
      */
-    public deleteCompany = async (id:number , req: Request, res: Response): Promise<QueryResult | "isNotExist" | undefined> => {
+    public deleteCompany = async (id:number , req: Request, res: Response): Promise<any> => {
 
         try {
-            const isExistCompany = await this.isExist('',id)
-
-            if (Array.isArray(isExistCompany) && isExistCompany.length === 0) {
-                return 'isNotExist'               
-            }
+            const isExistCompany = await this.isExist('',id) as any
 
             const query = `
             DELETE 
@@ -138,7 +146,10 @@ class Companies {
             const [company] = await this.pool.query(query, [id])
 
             console.log(`DEKLETE Company ID:${id}`)
-            return company
+            if(isExistCompany.length === 0)
+                return res.status(400).json({ error: "L'entreprise n'existe pas! " })
+            
+            return res.status(201).json({ message: 'Company Deleted successfully' })  
 
         } catch (error) {
             console.error(error)
@@ -151,10 +162,10 @@ class Companies {
      * @param id ithe company
      * @returns data company
      */
-    public isExist = async (tva?: any, id?: number): Promise<QueryResult> => {
+    public isExist = async (tva?: any, id?: number): Promise<any> => {
 
         const queryCompanyIsExist = `
-                SELECT companies.name,companies.tva
+                SELECT companies.name,companies.tva, companies.id
                 FROM companies
                 WHERE companies.tva = ? OR companies.id = ?`;
 

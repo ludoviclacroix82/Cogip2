@@ -3,6 +3,13 @@ import dotenv from 'dotenv'
 import route from './Routes/route'
 import connectToDatabase from './utils/connect'
 
+//docs Api
+const swaggerUi = require('swagger-ui-express')
+const swaggerJsdoc  =  require ( 'swagger-jsdoc' )
+const {options} = require('../src/utils/swaggerOptions')
+
+
+
 dotenv.config()
 
 const app = express()
@@ -10,6 +17,9 @@ const PORT = process.env.PORT || 3000
 connectToDatabase()
 
 app.use(express.json())
+
+const openapiSpecification = swaggerJsdoc(options)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 app.use('/', route)
 
