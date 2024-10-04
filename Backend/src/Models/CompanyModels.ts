@@ -43,7 +43,7 @@ class Companies {
             const [companies] = await this.pool.query(query)
 
             console.log('GET Companies')
-            return res.status(200).json({companies : companies})
+            return companies
 
         } catch (err) {
             console.error(err)
@@ -57,24 +57,24 @@ class Companies {
      * @param res 
      * @returns data company
      */
-    public getCompany = async (id: number, req: Request, res: Response): Promise<any> => {
+    public getCompany = async (id: number|undefined, req: Request, res: Response): Promise<any> => {
         try {
 
             const query = `
-                SELECT companies.*, country.name as country , types.name as type
+                SELECT companies.*, country.name as country, country.initials as initials , types.name as type
                 FROM companies
                 JOIN country ON companies.country_id = country.id
                 JOIN types ON companies.type_id = types.id 
                 WHERE companies.id = ?`
 
-            const [rows] = await this.pool.query(query, [id]) as any
+            const [company] = await this.pool.query(query, [id]) as any
 
             console.log(`GET Company ID:${id}`)
             
-            if(rows.length == 0)
+            if(company.length == 0)
                 return res.status(400).json({message : 'Company non found!'})
 
-            return res.status(200).json(rows)
+            return company
 
         } catch (err) {
             console.error(err)
@@ -93,7 +93,7 @@ class Companies {
             const isExistCompany = await this.isExist(this.tva) as any
 
             if(isExistCompany.length > 0)
-                return res.status(409).json({ error: `La TVA est déjà enregistrée pour #${isExistCompany.id} ${isExistCompany.name} ` })
+                return false
 
             const query = `
             INSERT 
@@ -120,7 +120,7 @@ class Companies {
             }
 
             
-            return res.status(201).json({ message: 'Company created successfully', data: data })
+            return  data 
 
         } catch (error) {
             console.error(error)
@@ -140,7 +140,7 @@ class Companies {
         const isExistCompany = await this.isExist('',id) as any         
 
         if(isExistCompany.length === 0)
-            return res.status(400).json({message: "Company no found!"})
+            return false
 
         data.updated_at = this.updated_at
         const fields = Object.keys(data).map(key => `${key} = ?`).join(', ')        
@@ -153,8 +153,7 @@ class Companies {
         const copanyUpdate = await this.pool.query(query,[...Object.values(data), id])
 
         console.log(`Patch company #${id}`)  
-        return res.status(200).json({message :  `Company #${id} update successsfully!`, data : data})
-
+        
     }
 
     /**
@@ -170,7 +169,7 @@ class Companies {
             const isExistCompany = await this.isExist('',id) as any
             
             if(isExistCompany.length === 0)
-                return res.status(400).json({ error: "L'entreprise n'existe pas! " })
+                return false
 
             const query = `
             DELETE 
@@ -181,7 +180,7 @@ class Companies {
 
             console.log(`DEKLETE Company ID:${id}`)
             
-            return res.status(201).json({ message: 'Company Deleted successfully' })  
+            return company 
 
         } catch (error) {
             console.error(error)

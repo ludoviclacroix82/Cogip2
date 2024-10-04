@@ -23,8 +23,6 @@ const validateCompanyUpdate = Joi.object({
     updated_at: Joi.date().greater('now'),
 })
 
-
-
 const validateCountry = Joi.object({
     name: Joi.string().min(5).max(50).required(),
     initials : Joi.string().min(1).max(2).required(),
@@ -32,12 +30,20 @@ const validateCountry = Joi.object({
     updated_at: Joi.date().greater('now'),
 })
 
+const Validateinvoice = Joi.object({
+    company_id: Joi.number().required(),
+    price : Joi.number().required()
+})
+
 const validatorCompany = validator(validateCompany)
 const validatorCompanyUpdate = validator(validateCompanyUpdate)
 
 const validatorCountry = validator(validateCountry)
 
+const validatorInvoice = validator(Validateinvoice)
+
 export { 
     validatorCompany,
     validatorCountry,
-    validatorCompanyUpdate}
+    validatorCompanyUpdate,
+    validatorInvoice}

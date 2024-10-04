@@ -3,6 +3,7 @@ import { Router, Request, Response } from 'express'
 
 const CompanyControllers = require('../Controllers/CompanyControllers')
 const CountryControllers = require('../Controllers/CountryControllers')
+const InvoicesControllers = require('../Controllers/InvoicesControllers')
 
 const router = Router()
 
@@ -132,7 +133,6 @@ router.post('/companies', CompanyControllers.create)
  *       400:
  *         description: Company not found        
  */
-
 router.patch('/companies/:id',CompanyControllers.update)
 
 /**
@@ -222,7 +222,6 @@ router.get('/countries/:id',CountryControllers.view)
  *       409:
  *         description: The country Exist !  
  */
-
 router.post('/countries',CountryControllers.create)
 
 /**
@@ -246,4 +245,41 @@ router.post('/countries',CountryControllers.create)
  */
 router.delete('/countries/:id',CountryControllers.deleteCountry)
 
+
+// Routes Invoices
+/**
+ * @openapi
+ * /invoices:
+ *   get:
+ *     tags:
+ *       - Invoices
+ *     description: Get all invoices
+ *     responses:
+ *       200:
+ *         description: Sucess
+ */
+router.get('/invoices',InvoicesControllers.viewAll)
+
+/**
+ * @openapi
+ * /invoices/{ref}:
+ *   get:
+ *     tags:
+ *       - Invoices
+ *     description :  Get invoice with Ref
+ *     parameters:
+ *       - name: ref
+ *         in: path
+ *         description: Reference invoice
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Sucess
+ *       400:
+ *         description: Invoice no found
+ */
+router.get('/invoices/:ref',InvoicesControllers.view)
+
+router.post('/invoices',InvoicesControllers.create)
 export default router

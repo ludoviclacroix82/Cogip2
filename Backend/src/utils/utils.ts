@@ -13,4 +13,25 @@ const formatDate = (date: Date) => {
     return `${year}-${month}-${day} ${hour}:${min}:00`
 }
 
-export { formatDate }
+const generatorRef = (initials : string):string =>{
+
+    const _arrayCaracteres = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+    
+
+    const generator = (num : number) =>{
+    let result = ''
+
+        for (let i = 1; i <=num; i++) {
+            const random = Math.floor(Math.random()*_arrayCaracteres.length)
+            result +=_arrayCaracteres[random]            
+        }
+        return result
+    }
+
+    const refPart1 = generator(5)
+    const refPart2 = generator(3)
+
+    return `${initials}${refPart1}-${refPart2}`
+}
+
+export { formatDate , generatorRef}

@@ -6,7 +6,7 @@ import {validatorCompany} from '../utils/validator'
 const viewAll = async (req: Request, res: Response): Promise<Response> => {
     try {
         const companies = await new Companies().getCompanies(req, res)
-        return companies
+        return res.status(200).json({companies : companies})
 
     } catch (error: any) {
         console.error("Error fetching companies:", error)
@@ -21,7 +21,7 @@ const view = async (req: Request, res: Response) => {
     
     try {
         const company = await new Companies().getCompany(companyId,req,res)
-        return company
+        return res.status(200).json({companies : company})
         
     } catch (error) {
         console.error("Error fetching company:", error)
@@ -45,8 +45,12 @@ const create = async (req: Request, res: Response) => {
             value.country_id,
             value.tva
         )
-        const companyCreated = await company.postCompany(req,res)   
-        return companyCreated
+        const companyCreated = await company.postCompany(req,res)  
+        
+        if(!companyCreated)
+            return res.status(409).json({ error: `La TVA est déjà enregistrée` })
+        
+        return res.status(201).json({ message: 'Company created successfully', data: companyCreated })
         
     } catch (error) {
         console.error("Error fetching company:", error)
@@ -64,7 +68,11 @@ const update =  async(req:Request,res:Response) =>{
     }
 
     const companyUpdate = new Companies().updateCompany(companyId,value,req,res)
-    return companyUpdate
+
+    if(!companyUpdate)
+        return res.status(400).json({message: "Company no found!"})
+
+    return res.status(200).json({message :  `Company #${id} update successsfully!`})
 
 }
 
@@ -74,8 +82,12 @@ const deleteCompany = async (req :Request , res:Response) =>{
     const companyId = parseInt(id)
 
     try {
-        const companyDelete = await new Companies().deleteCompany(companyId,req,res)       
-        return companyDelete 
+        const companyDelete = await new Companies().deleteCompany(companyId,req,res) 
+
+        if(!companyDelete)
+            return res.status(400).json({message: "Company no found!"})    
+
+        return res.status(201).json({ message: 'Company Deleted successfully' })   
         
     } catch (error) {
         console.error("Error fetching company:", error)

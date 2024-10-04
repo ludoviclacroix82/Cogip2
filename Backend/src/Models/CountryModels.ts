@@ -1,8 +1,6 @@
 // src/Models/CountryModels.ts
 import { Response, Request } from 'express'
 import connectToDatabase from '../utils/connect'
-import { Query } from 'mysql2/typings/mysql/lib/protocol/sequences/Query'
-import { QueryResult } from 'mysql2'
 
 const { formatDate } = require('../utils/utils')
 
@@ -26,7 +24,7 @@ class Country {
      * @param res 
      * @returns datas countries
      */
-    public getCountries = async (req: Request, res: Response):Promise<any> => {
+    public getCountries = async (req: Request, res: Response): Promise<any> => {
 
         try {
             const query = `
@@ -37,14 +35,14 @@ class Country {
             const [countries] = await this.pool.query(query)
 
             console.log('GET countries')
-            return res.status(200).json({countries : countries})
+            return countries
 
         } catch (error) {
             console.error(error)
         }
     }
 
-    public getCountry = async (id: number, req: Request, res: Response):Promise<any> => {
+    public getCountry = async (id: number, req: Request, res: Response): Promise<any> => {
         try {
 
             const query = `
@@ -56,80 +54,79 @@ class Country {
 
             console.log(`GET Country id = ${id}`)
 
-            if(country.length === 0)
-                return res.status(400).json({message : "Country no found!"})
+            if (country.length === 0)
+                return false
 
-            return res.status(200).json({country:country})
+            return country
 
         } catch (error) {
             console.error(error)
         }
     }
 
-    public create = async (req: Request, res: Response):Promise<any> => {
+    public create = async (req: Request, res: Response): Promise<any> => {
         try {
 
-            const isExistCountry = await this.isExist(this.initials,0) as any
+            const isExistCountry = await this.isExist(this.initials, 0) as any
 
-            if( isExistCountry.length > 0)
-                return res.status(409).json({message : "This country exist !"})
+            if (isExistCountry.length > 0)
+                return false
+
 
             const query = `
                 INSERT 
                 INTO country(name,initials,created_at,updated_at) 
                 VALUES (?,?,?,?)`
 
-            const [country] = await this.pool.query(query,[
-                    this.name,
-                    this.initials,
-                    this.created_at,
-                    this.updated_at ]
+            const [country] = await this.pool.query(query, [
+                this.name,
+                this.initials,
+                this.created_at,
+                this.updated_at]
             )
 
             const data = {
-                name : this.name,
-                initials : this.initials,
-                created_at : this.created_at,
-                updated_at : this.updated_at
+                name: this.name,
+                initials: this.initials,
+                created_at: this.created_at,
+                updated_at: this.updated_at
             }
             console.log(`POST Country ${this.name}`)
-            
 
-            return res.status(200).json({message : "Country create successfully " , data:data})
+
+            return data
 
         } catch (error) {
             console.error(error)
         }
     }
 
-    public deleteCountry = async (id: number, req: Request, res: Response):Promise<any> => {
+    public deleteCountry = async (id: number, req: Request, res: Response): Promise<any> => {
 
         try {
 
-            const isExistCountry =  await this.isExist('',id) as any
-            
-            if(isExistCountry.length === 0)
-                return res.status(400).json({message : `the country id #${id} is not exist ! `})
+            const isExistCountry = await this.isExist('', id) as any
+
+            if (isExistCountry.length === 0)
+                return false
 
             const query = `
                 DELETE 
                 FROM country
                 WHERE id = ? `
 
-            const [country] = await this.pool.query(query,[id])
+            const [country] = await this.pool.query(query, [id])
 
             console.log(`DELETE Country id ${id}`)
 
-
-            return res.status(200).json({message: 'Country deleted successfully !'})
-            
+            return country
 
         } catch (error) {
             console.error(error)
         }
     }
 
-    public isExist = async (initials?: string,id?:number) => {
+    public isExist = async (initials?: string, id?: number) => {
 
         try {
             const query = `
@@ -137,7 +134,7 @@ class Country {
                 FROM country
                 WHERE initials = ? OR id = ?`
 
-            const [isExist] = await this.pool.query(query, [initials,id])
+            const [isExist] = await this.pool.query(query, [initials, id])
             return isExist
         } catch (error) {
 
