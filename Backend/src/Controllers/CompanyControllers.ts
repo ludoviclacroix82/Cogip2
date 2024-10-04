@@ -67,6 +67,7 @@ const update =  async(req:Request,res:Response) =>{
 
     const {id} = req.params
     const companyId = parseInt(id)
+    
     const { error, value } = validatorCompany(req.body)
     if (error) {
         return res.status(400).send(error.details)
@@ -92,7 +93,7 @@ const deleteCompany = async (req :Request , res:Response) =>{
 
         if(!companyDelete)
             return res.status(400).json({message: "Company no found!"})    
-        
+
         console.log(`DEKLETE Company ID:${id}`)
         return res.status(201).json({ message: 'Company Deleted successfully' })   
         

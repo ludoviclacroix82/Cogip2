@@ -282,4 +282,7 @@ router.get('/invoices',InvoicesControllers.viewAll)
 router.get('/invoices/:ref',InvoicesControllers.view)
 
 router.post('/invoices',InvoicesControllers.create)
+
+router.patch('/invoices/:ref',InvoicesControllers.update)
+
 export default router

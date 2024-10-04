@@ -121,6 +121,30 @@ class Invoices {
 
         }
     }
+    public updateInvoice = async (ref:string , data:any , req:Request , res:Response) =>{
+        try {
+             
+            // const isExistInvoice = await this.isExist(ref) as any
+            
+            // if(isExistInvoice.length == 0)
+            //     return false
+
+            data.updated_at = this.updated_at
+            const fields = Object.keys(data).map(key => `${key} = ?`).join(', ') 
+
+            const query = `
+                UPDATE invoices
+                SET ${fields}
+                WHERE ref = ?`
+
+            const invoiceUpdate = await this.pool.query(query,[...Object.values(data),ref])
+
+            return data
+
+        } catch (error) {
+            console.log(error)            
+        }
+    }
     public isExist = (ref?: string) => {
 
         try {

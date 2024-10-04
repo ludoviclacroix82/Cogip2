@@ -49,4 +49,23 @@ const create = async (req:Request , res:Response) =>{
         return res.status(500).json({message :  'Internal Server Error'}) 
     }
 }
-export {viewAll , view ,create}
+
+const update = async (req:Request , res:Response) =>{
+    try {
+
+        const {ref} = req.params
+        const {error, value} = validatorInvoice(req.body)
+
+        if(error)
+            return res.status(400).send(error.details)
+
+        const invoiceUpdate = await new Invoices(value.company_id,value.price).updateInvoice(ref,value,req,res)
+
+        return res.status(200).json({ message: "Country update successfully ", data: invoiceUpdate })
+        
+    } catch (error) {
+        return res.status(500).json({message :  'Internal Server Error'}) 
+    }
+}
+
+export {viewAll , view ,create , update}
