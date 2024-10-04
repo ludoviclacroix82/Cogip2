@@ -41,8 +41,6 @@ class Companies {
                 JOIN types ON companies.type_id = types.id`
 
             const [companies] = await this.pool.query(query)
-
-            console.log('GET Companies')
             return companies
 
         } catch (err) {
@@ -68,8 +66,6 @@ class Companies {
                 WHERE companies.id = ?`
 
             const [company] = await this.pool.query(query, [id]) as any
-
-            console.log(`GET Company ID:${id}`)
             
             if(company.length == 0)
                 return res.status(400).json({message : 'Company non found!'})
@@ -108,7 +104,7 @@ class Companies {
                 this.created_at,
                 this.updated_at
             ])
-            console.log(`POST Company ${this.name}`)
+            
            
             const data = {
                 name:this.name,
@@ -150,10 +146,7 @@ class Companies {
             SET ${fields}
             WHERE id = ?
         `        
-        const copanyUpdate = await this.pool.query(query,[...Object.values(data), id])
-
-        console.log(`Patch company #${id}`)  
-        
+        const copanyUpdate = await this.pool.query(query,[...Object.values(data), id])        
     }
 
     /**
@@ -176,10 +169,7 @@ class Companies {
             FROM companies 
             WHERE id = ?`
 
-            const [company] = await this.pool.query(query, [id])
-
-            console.log(`DEKLETE Company ID:${id}`)
-            
+            const [company] = await this.pool.query(query, [id])            
             return company 
 
         } catch (error) {

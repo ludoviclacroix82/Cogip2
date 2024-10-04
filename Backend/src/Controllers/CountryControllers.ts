@@ -7,11 +7,10 @@ const { validatorCountry } = require('../utils/validator')
 const viewAll = async (req: Request, res: Response) => {
 
     try {
-
         const countries = await new Country().getCountries(req, res)
+
+        console.log('GET countries')
         return res.status(200).json({ countries: countries })
-
-
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: "Internal server error" })
@@ -29,8 +28,8 @@ const view = async (req: Request, res: Response) => {
         if (!country)
             return res.status(400).json({ message: "Country no found!" })
 
+        console.log(`GET Country id = ${id}`)
         return res.status(200).json({ country: country })
-
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: "Internal server error" })
@@ -48,11 +47,12 @@ const create = async (req: Request, res: Response) => {
     const country = await new Country(
         value.name,
         value.initials,
-    ).create(req, res)
+    ).postCountry(req, res)
 
     if (!country)
         return res.status(409).json({ message: "This country exist !" })
 
+    console.log(`POST Country ${value.name}`)
     return res.status(200).json({ message: "Country create successfully ", data: country })
 }
 
@@ -65,7 +65,8 @@ const deleteCountry = async (req: Request, res: Response) => {
 
     if (!country)
         return res.status(400).json({ message: `the country id #${id} is not exist ! ` })
-
+    
+    console.log(`DELETE Country id ${id}`)
     return res.status(200).json({ message: 'Country deleted successfully !' })
 }
 

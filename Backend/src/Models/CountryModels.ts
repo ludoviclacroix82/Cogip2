@@ -33,8 +33,6 @@ class Country {
                 ORDER BY name ASC`
 
             const [countries] = await this.pool.query(query)
-
-            console.log('GET countries')
             return countries
 
         } catch (error) {
@@ -44,7 +42,6 @@ class Country {
 
     public getCountry = async (id: number, req: Request, res: Response): Promise<any> => {
         try {
-
             const query = `
                 SELECT *
                 FROM country
@@ -52,26 +49,22 @@ class Country {
 
             const [country] = await this.pool.query(query, [id]) as any
 
-            console.log(`GET Country id = ${id}`)
-
             if (country.length === 0)
                 return false
 
             return country
-
         } catch (error) {
             console.error(error)
         }
     }
 
-    public create = async (req: Request, res: Response): Promise<any> => {
+    public postCountry = async (req: Request, res: Response): Promise<any> => {
         try {
 
             const isExistCountry = await this.isExist(this.initials, 0) as any
 
             if (isExistCountry.length > 0)
                 return false
-
 
             const query = `
                 INSERT 
@@ -91,9 +84,7 @@ class Country {
                 created_at: this.created_at,
                 updated_at: this.updated_at
             }
-            console.log(`POST Country ${this.name}`)
-
-
+           
             return data
 
         } catch (error) {
@@ -116,9 +107,6 @@ class Country {
                 WHERE id = ? `
 
             const [country] = await this.pool.query(query, [id])
-
-            console.log(`DELETE Country id ${id}`)
-
             return country
 
         } catch (error) {

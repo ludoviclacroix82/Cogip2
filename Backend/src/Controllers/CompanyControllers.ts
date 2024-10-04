@@ -6,8 +6,9 @@ import {validatorCompany} from '../utils/validator'
 const viewAll = async (req: Request, res: Response): Promise<Response> => {
     try {
         const companies = await new Companies().getCompanies(req, res)
-        return res.status(200).json({companies : companies})
 
+        console.log('GET Companies')
+        return res.status(200).json({companies : companies})
     } catch (error: any) {
         console.error("Error fetching companies:", error)
         return res.status(500).json({ error: 'An error occurred while fetching companies' })
@@ -21,7 +22,10 @@ const view = async (req: Request, res: Response) => {
     
     try {
         const company = await new Companies().getCompany(companyId,req,res)
+
+        console.log(`GET Company ID:${id}`)
         return res.status(200).json({companies : company})
+
         
     } catch (error) {
         console.error("Error fetching company:", error)
@@ -50,8 +54,9 @@ const create = async (req: Request, res: Response) => {
         if(!companyCreated)
             return res.status(409).json({ error: `La TVA est déjà enregistrée` })
         
+        console.log(`POST Company ${value.name}`)
         return res.status(201).json({ message: 'Company created successfully', data: companyCreated })
-        
+ 
     } catch (error) {
         console.error("Error fetching company:", error)
         return res.status(500).json({ error: 'An error occurred while fetching company' })
@@ -72,6 +77,7 @@ const update =  async(req:Request,res:Response) =>{
     if(!companyUpdate)
         return res.status(400).json({message: "Company no found!"})
 
+    console.log(`Patch company #${id}`)  
     return res.status(200).json({message :  `Company #${id} update successsfully!`})
 
 }
@@ -86,7 +92,8 @@ const deleteCompany = async (req :Request , res:Response) =>{
 
         if(!companyDelete)
             return res.status(400).json({message: "Company no found!"})    
-
+        
+        console.log(`DEKLETE Company ID:${id}`)
         return res.status(201).json({ message: 'Company Deleted successfully' })   
         
     } catch (error) {
