@@ -2,6 +2,7 @@
 import { Request, Response } from "express"
 import connectToDatabase from '../utils/connect'
 import Companies from '../Models/CompanyModels'
+import { log } from "console"
 
 const { formatDate, generatorRef } = require('../utils/utils')
 
@@ -90,7 +91,7 @@ class Invoices {
 
             while (isExistInvoice) {
                 ref = generatorRef(companies.initials)
-                isExistInvoice = this.isExist(ref) as any
+                isExistInvoice = await this.isExist(ref) as any
             }
 
             const query = `
@@ -121,31 +122,31 @@ class Invoices {
 
         }
     }
-    public updateInvoice = async (ref:string , data:any , req:Request , res:Response) =>{
+    public updateInvoice = async (ref: string, data: any, req: Request, res: Response) => {
         try {
-             
-            // const isExistInvoice = await this.isExist(ref) as any
-            
-            // if(isExistInvoice.length == 0)
-            //     return false
+
+            const isExistInvoice = await this.isExist(ref)
+
+            if (!isExistInvoice)
+                return false
 
             data.updated_at = this.updated_at
-            const fields = Object.keys(data).map(key => `${key} = ?`).join(', ') 
+            const fields = Object.keys(data).map(key => `${key} = ?`).join(', ')
 
             const query = `
                 UPDATE invoices
                 SET ${fields}
                 WHERE ref = ?`
 
-            const invoiceUpdate = await this.pool.query(query,[...Object.values(data),ref])
+            const invoiceUpdate = await this.pool.query(query, [...Object.values(data), ref])
 
             return data
 
         } catch (error) {
-            console.log(error)            
+            console.log(error)
         }
     }
-    public isExist = (ref?: string) => {
+    public isExist = async (ref?: string) => {
 
         try {
 
@@ -154,15 +155,19 @@ class Invoices {
                 FROM invoices
                 Where ref = ?`
 
-            const invoice = this.pool.query(query, [ref])
+            const [invoice] = await this.pool.query(query, [ref]) as any
+
+            console.log(invoice);
+
+            if (invoice.lehght > 0)
+                return true
+            return false
 
         } catch (error) {
             console.log(error);
 
         }
-
     }
-
 }
 
 export default Invoices

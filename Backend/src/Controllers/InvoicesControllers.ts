@@ -61,6 +61,9 @@ const update = async (req:Request , res:Response) =>{
 
         const invoiceUpdate = await new Invoices(value.company_id,value.price).updateInvoice(ref,value,req,res)
 
+        if(!invoiceUpdate)
+            return res.status(400).json({message: 'Invoice no found'})
+
         return res.status(200).json({ message: "Country update successfully ", data: invoiceUpdate })
         
     } catch (error) {
