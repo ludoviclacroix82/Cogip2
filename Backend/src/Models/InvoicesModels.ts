@@ -2,7 +2,6 @@
 import { Request, Response } from "express"
 import connectToDatabase from '../utils/connect'
 import Companies from '../Models/CompanyModels'
-import { log } from "console"
 
 const { formatDate, generatorRef } = require('../utils/utils')
 
