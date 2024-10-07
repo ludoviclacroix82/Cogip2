@@ -69,7 +69,7 @@ npm start
 npm run dev
 ```
 
-- In development mode
+- The server will be available at http://localhost:3000.
 
 ## Documentation API
 
