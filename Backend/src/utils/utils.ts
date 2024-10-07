@@ -22,7 +22,8 @@ const generatorRef = (initials : string):string =>{
     let result = ''
 
         for (let i = 1; i <=num; i++) {
-            const random = Math.floor(Math.random()*_arrayCaracteres.length-1)
+            const random = Math.floor(Math.random()*(_arrayCaracteres.length))
+            
             result +=_arrayCaracteres[random]            
         }
         return result

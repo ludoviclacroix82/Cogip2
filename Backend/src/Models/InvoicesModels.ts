@@ -72,8 +72,6 @@ class Invoices {
             if (invoice.length === 0)
                 return false
 
-            console.log(`Get invoice ref: ${ref}`);
-
             return invoice
 
         } catch (error) {
@@ -125,7 +123,7 @@ class Invoices {
     public updateInvoice = async (ref: string, data: any, req: Request, res: Response) => {
         try {
 
-            const isExistInvoice = await this.isExist(ref)
+            const isExistInvoice = await this.isExist(ref)           
 
             if (!isExistInvoice)
                 return false
@@ -146,6 +144,30 @@ class Invoices {
             console.log(error)
         }
     }
+
+    public deleteInvoice = async (ref:string , req:Request , res:Response) =>{
+
+        try {
+
+            const isExistInvoice = await this.isExist(ref) 
+            if (!isExistInvoice)
+                return false
+            
+            const query =`
+            DELETE 
+            FROM invoices
+            Where ref = ?
+            `
+
+            const deleteInvoice =  await this.pool.query(query,[ref])
+
+            return  deleteInvoice
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
     public isExist = async (ref?: string) => {
 
         try {
@@ -155,17 +177,15 @@ class Invoices {
                 FROM invoices
                 Where ref = ?`
 
-            const [invoice] = await this.pool.query(query, [ref]) as any
-
-            console.log(invoice);
-
-            if (invoice.lehght > 0)
+            const invoice = await this.pool.query(query, [ref]) as any
+            
+            if (invoice[0].length >0)
                 return true
+
             return false
 
         } catch (error) {
-            console.log(error);
-
+            console.log(error)
         }
     }
 }

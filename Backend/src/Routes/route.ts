@@ -280,9 +280,93 @@ router.get('/invoices',InvoicesControllers.viewAll)
  *         description: Invoice no found
  */
 router.get('/invoices/:ref',InvoicesControllers.view)
-
+/**
+ * @openapi
+ * /invoices:
+ *   post:
+ *    tags:
+ *      - Invoices
+ *    description: Create Invoice
+ *    requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               company_id:
+ *                 type: integer
+ *                 description: id compny for this Invoice
+ *                 example: "3"  # Exemple de valeur
+ *               price:
+ *                 type: integer
+ *                 description: price total Invoice
+ *                 example: "200.50"  # Exemple de valeur
+ *    responses:
+ *      200:
+ *        description: Success
+ *      400:
+ *        description: Invoice no found       
+ */
 router.post('/invoices',InvoicesControllers.create)
 
+/**
+ * @openapi
+ * /invoices/{ref}:
+ *   patch:
+ *     tags:
+ *       - Invoices
+ *     description: Create Invoice
+ *     parameters:
+ *       - name: ref
+ *         in: path
+ *         required: true
+ *         description: Reference for the Invoice
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               company_id:
+ *                 type: integer
+ *                 description: ID of the company for this invoice
+ *                 example: 3  # Exemple de valeur (integer sans guillemets)
+ *               price:
+ *                 type: number  
+ *                 description: Total price of the invoice
+ *                 example: 2000.50  # Exemple de valeur correcte pour un prix décimal
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Invalid input or Invoice not found       
+ */
 router.patch('/invoices/:ref',InvoicesControllers.update)
+
+/**
+ * @openapi
+ * /invoices/{ref}:
+ *   delete:
+ *     tags:
+ *       - Invoices
+ *     description: Delete Invoice with the provided reference
+ *     parameters:
+ *       - name: ref
+ *         in: path
+ *         required: true
+ *         description: Reference of the Invoice to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Invoice not found
+ */
+router.delete('/invoices/:ref',InvoicesControllers.deleteInvoice)
 
 export default router
