@@ -1,48 +1,49 @@
-# API de Facturation Cogip
+# Cogip Billing API
 
 ## Description
-Ce projet est une API de facturation , elle permet de créer, lire, mettre à jour et supprimer des factures.
+This project is a billing API that allows you to create, read, update, and delete invoices.
 
-## Fonctionnalités
- - Factures : Créer, lire, mettre à jour et supprimer des factures.
- - Compagnies : Créer, lire, mettre à jour et supprimer des compagnies.
- - Contacts : Créer, lire, mettre à jour et supprimer des contacts.
+## Features
+- **Invoices**: Create, read, update, and delete invoices.
+- **Companies**: Create, read, update, and delete companies.
+- **Contacts**: Create, read, update, and delete contacts.
 
-## Prérequis
-- Node.js (version 16 ou supérieure)
+## Prerequisites
+- Node.js (version 16 or higher)
 - npm (Node Package Manager)
 - MySQL
 - Docker
 
-## Technologies Utilisées
+## Technologies Used
 
-- Node.js : Exécution du code JavaScript côté serveur
-- Express.js (v5) : Framework pour la création d'API
-- TypeScript : Superset de JavaScript avec typage statique
-- Joi : Validation des données
-- MySQL & MySQL2 : Connecteurs pour la base de données MySQL
-- Swagger : Documentation de l'API (via swagger-jsdoc et swagger-ui-express)
-- dotenv : Gestion des variables d'environnement
-### Outils de développement
-- ts-node : Exécution directe de fichiers TypeScript sans les compiler
-- @types/express, @types/node : Types pour Express et Node.js
+- **Node.js**: Executes JavaScript code on the server side
+- **Express.js (v5)**: Framework for creating APIs
+- **TypeScript**: Superset of JavaScript with static typing
+- **Joi**: Data validation
+- **MySQL & MySQL2**: Connectors for the MySQL database
+- **Swagger**: API documentation (via swagger-jsdoc and swagger-ui-express)
+- **dotenv**: Manages environment variables
+
+### Development Tools
+- **ts-node**: Directly executes TypeScript files without compiling them
+- **@types/express, @types/node**: Types for Express and Node.js
 
 ## Installation
 
-Suivez ces étapes pour installer et configurer le projet localement :
+Follow these steps to install and configure the project locally:
 
-1. **Cloner le dépôt** :
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/votre-repo/backend.git
+   git clone https://github.com/.../backend.git
    cd backend
-   ```
-2. **Installer les dépendances** :
+
+2. **Install dependencies:** :
 
 ```bash
     	npm install
 ```
-3. **Configurer les variables d'environnement** : 
-Créez un fichier .env à la racine du projet et ajoutez les variables nécessaires, comme la configuration de la base de données MySQL :
+3. **Configure environment variable** : 
+Create a .env file at the root of the project and add the necessary variables, such as the MySQL database configuration:
 
 ```bash
 DB_HOST=localhost
@@ -51,21 +52,29 @@ DB_PASSWORD=yourpassword
 DB_NAME=yourdatabase
 ```
 
-4. **Compiler le projet TypeScript** :
+4. **Compile the TypeScript project** :
 
 ```bash
 npm run build
 ```
-5. **Démarrer le serveur** :
+5. **Start the server:** :
 
-- En production :
+- In production :
 ```bash
 npm start
 ```
 
-- En mode développement :
+- In development mode :
 ```bash
 npm run dev
 ```
 
-- Le serveur sera disponible à l'adresse http://localhost:3000.
+- In development mode
+
+## Documentation API
+
+The API documentation is available at the following address:
+
+[http://localhost:3000/api-docs/](http://localhost:3000/api-docs/)
+
+ou will find detailed information about the API endpoints, parameters, and example requests there.
