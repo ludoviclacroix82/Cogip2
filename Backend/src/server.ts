@@ -2,6 +2,9 @@ import express from 'express'
 import dotenv from 'dotenv'
 import route from './Routes/route'
 import connectToDatabase from './utils/connect'
+const cors = require('cors')
+// Activer CORS pour toutes les origines
+
 
 //docs Api
 const swaggerUi = require('swagger-ui-express')
@@ -13,6 +16,7 @@ const {options} = require('../src/utils/swaggerOptions')
 dotenv.config()
 
 const app = express()
+app.use(cors())
 const PORT = process.env.PORT || 3000
 connectToDatabase()
 

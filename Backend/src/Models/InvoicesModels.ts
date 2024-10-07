@@ -42,10 +42,7 @@ class Invoices {
                 ORDER BY ref ASC`
 
             const [invoices] = await this.pool.query(query)
-
-            console.log('GET Invoices');
-
-            return invoices
+           return invoices
 
         } catch (error) {
             console.log(error)
@@ -54,7 +51,7 @@ class Invoices {
     /**
      * View the invoice with ref
      * @param ref reference the invoice
-     * @param req 
+     * @param req
      * @param res 
      * @returns return data invoice 
      */
