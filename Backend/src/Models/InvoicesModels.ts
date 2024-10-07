@@ -34,13 +34,16 @@ class Invoices {
 
         try {
 
+            const { limit , offset} = req.params;
+            
             const query = `
                 SELECT invoices.*, companies.name as company
                 FROM invoices
                 JOIN companies ON invoices.company_id = companies.id
-                ORDER BY ref ASC`
+                ORDER BY ref ASC
+                LIMIT ? OFFSET ?`
 
-            const [invoices] = await this.pool.query(query)
+            const [invoices] = await this.pool.query(query,[parseInt(limit),parseInt(offset)])
            return invoices
 
         } catch (error) {

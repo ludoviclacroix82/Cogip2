@@ -39,7 +39,9 @@
     async created() {
       const invoiceModel = new Invoice()
       try {
-        const response = await invoiceModel.getInvoices()
+        const limit = 5
+        const offset = 0
+        const response = await invoiceModel.getInvoices(limit,offset)
         this.invoices = response.invoices       
       } catch (error) {
         console.error("Error fetching invoices:", error)

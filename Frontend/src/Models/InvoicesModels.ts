@@ -22,18 +22,18 @@ class Invoice {
     }
 
 
-    public getInvoices =  async () =>{
+    public getInvoices =  async (limit: number , offset:number) =>{
 
         try {   
             
-            const response = await fetch(`http://localhost:3000/invoices`)                    
+            const response = await fetch(`http://localhost:3000/invoices/${limit}/${offset}`)                    
                        
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`)
             }          
               const json = await response.json()
               return json
-              
+
         } catch (error) {
             console.log(error)
             

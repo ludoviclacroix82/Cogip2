@@ -254,11 +254,22 @@ router.delete('/countries/:id',CountryControllers.deleteCountry)
  *     tags:
  *       - Invoices
  *     description: Get all invoices
+ *     parameters:
+ *       - name: limit
+ *         in: path
+ *         description: limit view invoices
+ *         schema:
+ *           type: integer
+ *       - name: offset
+ *         in: path
+ *         description: offset view invoices
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Sucess
  */
-router.get('/invoices',InvoicesControllers.viewAll)
+router.get('/invoices/:limit/:offset',InvoicesControllers.viewAll)
 
 /**
  * @openapi
