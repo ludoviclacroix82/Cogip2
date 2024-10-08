@@ -319,7 +319,7 @@ router.get('/invoices/:ref',InvoicesControllers.view)
  *      400:
  *        description: Invoice no found       
  */
-// router.post('/invoices',InvoicesControllers.create)
+router.post('/invoices',InvoicesControllers.create)
 
 /**
  * @openapi
@@ -356,7 +356,7 @@ router.get('/invoices/:ref',InvoicesControllers.view)
  *       400:
  *         description: Invalid input or Invoice not found       
  */
-// router.patch('/invoices/:ref',InvoicesControllers.update)
+router.patch('/invoices/:ref',InvoicesControllers.update)
 
 /**
  * @openapi
@@ -378,6 +378,6 @@ router.get('/invoices/:ref',InvoicesControllers.view)
  *       400:
  *         description: Invoice not found
  */
-// router.delete('/invoices/:ref',InvoicesControllers.deleteInvoice)
+router.delete('/invoices/:ref',InvoicesControllers.deleteInvoice)
 
 export default router
