@@ -24,7 +24,7 @@ router.get('/', (req: Request, res: Response) => {
  *       200: 
  *         description: Success
  */
-router.get('/companies',CompanyControllers.viewAll)
+// router.get('/companies',CompanyControllers.viewAll)
 
 /**
  * @openapi
@@ -46,7 +46,7 @@ router.get('/companies',CompanyControllers.viewAll)
  *       404:
  *         description: Company not found
  */
-router.get('/companies/:id',CompanyControllers.view)
+// router.get('/companies/:id',CompanyControllers.view)
 
 /**
  * @openapi
@@ -84,7 +84,7 @@ router.get('/companies/:id',CompanyControllers.view)
  *       409:
  *         description: The VAT is already recorded for a company. 
  */
-router.post('/companies', CompanyControllers.create)
+// router.post('/companies', CompanyControllers.create)
 
 /**
  * @openapi
@@ -133,7 +133,7 @@ router.post('/companies', CompanyControllers.create)
  *       400:
  *         description: Company not found        
  */
-router.patch('/companies/:id',CompanyControllers.update)
+// router.patch('/companies/:id',CompanyControllers.update)
 
 /**
  * @openapi
@@ -155,7 +155,7 @@ router.patch('/companies/:id',CompanyControllers.update)
  *     404:
  *       description: Company not found    
  */
-router.delete('/companies/:id',CompanyControllers.deleteCompany)
+// router.delete('/companies/:id',CompanyControllers.deleteCompany)
 
 // Route Countries
 
@@ -269,7 +269,7 @@ router.delete('/countries/:id',CountryControllers.deleteCountry)
  *       200:
  *         description: Sucess
  */
-router.get('/invoices/:limit/:offset',InvoicesControllers.viewAll)
+router.get('/invoices/:limit/:offset/',InvoicesControllers.viewAll)
 
 /**
  * @openapi
@@ -319,7 +319,7 @@ router.get('/invoices/:ref',InvoicesControllers.view)
  *      400:
  *        description: Invoice no found       
  */
-router.post('/invoices',InvoicesControllers.create)
+// router.post('/invoices',InvoicesControllers.create)
 
 /**
  * @openapi
@@ -356,7 +356,7 @@ router.post('/invoices',InvoicesControllers.create)
  *       400:
  *         description: Invalid input or Invoice not found       
  */
-router.patch('/invoices/:ref',InvoicesControllers.update)
+// router.patch('/invoices/:ref',InvoicesControllers.update)
 
 /**
  * @openapi
@@ -378,6 +378,6 @@ router.patch('/invoices/:ref',InvoicesControllers.update)
  *       400:
  *         description: Invoice not found
  */
-router.delete('/invoices/:ref',InvoicesControllers.deleteInvoice)
+// router.delete('/invoices/:ref',InvoicesControllers.deleteInvoice)
 
 export default router

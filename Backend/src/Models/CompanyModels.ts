@@ -1,7 +1,7 @@
 // src/Models/CompanyModels.ts
 
 import { Response, Request } from 'express'
-import connectToDatabase from '../utils/connect'
+import connectToDatabase from '../utils/_connect'
 
 const { formatDate } = require('../utils/utils')
 
