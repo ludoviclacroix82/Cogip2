@@ -1,75 +1,41 @@
 // src/Models/CompanyModels.ts
-
-import { Response, Request } from 'express'
-import connectToDatabase from '../utils/_connect'
+import { DataTypes, Model } from 'sequelize'
+import { Request, Response } from 'express'
+import sequelize from '../utils/db'
+import Companies from './_CompanyModels'
 
 const { formatDate } = require('../utils/utils')
 
-
-class Companies {
-    public id?: number
-    public name?: string
-    public type_id?: number
-    public country_id?: number
-    public tva?: string
-    public created_at?: Date
-    public updated_at?: Date
-
-    public pool = connectToDatabase()
-
-    constructor(name?: string, type_id?: number, country_id?: number, tva?: string) {
-        this.name = name
-        this.type_id = type_id
-        this.country_id = country_id
-        this.tva = tva
-        this.created_at = formatDate(new Date())
-        this.updated_at = formatDate(new Date())
-    }
+class Company extends Model {
     /**
      * Return data Mysql table companies
      * @param req request
      * @param res responce
      * @returns datas companies
      */
-    public getCompanies = async (req: Request, res: Response): Promise<any> => {
+    public static getCompanies = async (limit: number, offset: number, req: Request, res: Response) => {
 
         try {
-            const query = `
-                SELECT companies.*, country.name as country , types.name as type
-                FROM companies
-                JOIN country ON companies.country_id = country.id
-                JOIN types ON companies.type_id = types.id`
-
-            const [companies] = await this.pool.query(query)
+            const companies = await Company.findAll({
+                limit: limit,
+                offset: offset,
+                order: [['created_at', 'DESC']],
+            })
             return companies
-
         } catch (err) {
             console.error(err)
-            res.status(500).json({ error: "Internal server error" })
         }
     }
     /**
-     * Return data Mysql table companies =>id
-     * @param id company
-     * @param req 
-     * @param res 
-     * @returns data company
-     */
-    public getCompany = async (id: number|undefined, req: Request, res: Response): Promise<any> => {
+    * Return data Mysql table companies =>id
+    * @param id company
+    * @param req 
+    * @param res 
+    * @returns data company
+    */
+    public static getCompany = async (id: number | undefined, req: Request, res: Response): Promise<any> => {
         try {
-
-            const query = `
-                SELECT companies.*, country.name as country, country.initials as initials , types.name as type
-                FROM companies
-                JOIN country ON companies.country_id = country.id
-                JOIN types ON companies.type_id = types.id 
-                WHERE companies.id = ?`
-
-            const [company] = await this.pool.query(query, [id]) as any
-            
-            if(company.length == 0)
-                return res.status(400).json({message : 'Company non found!'})
-
+            const company = await Company.findOne({ where: { id } })
             return company
 
         } catch (err) {
@@ -77,50 +43,28 @@ class Companies {
             res.status(500).json({ error: "Internal server error" })
         }
     }
-    /**
+
+        /**
      * Created company in te mysql tabale companies
      * @param req 
      * @param res 
      * @returns Return company data or indicate that it exists if the company is found in the companies table
      */
-    public postCompany = async (req: Request, res: Response): Promise<any> => {
+    public static postCompany = async (data:any,req: Request, res: Response): Promise<any> => {
         try {
 
-            const isExistCompany = await this.isExist(this.tva) as any
+            const companyTvaExist = await Company.findOne({
+                 where: {
+                      tva: data.tva 
+                }
+            })
+            if(companyTvaExist)  return null
 
-            if(isExistCompany.length > 0)
-                return false
-
-            const query = `
-            INSERT 
-            INTO companies(name, type_id, country_id, tva, created_at, updated_at) 
-            VALUES (?, ?, ?, ?, ?, ?)`
-
-            const [company] = await this.pool.query(query, [
-                this.name,
-                this.type_id,
-                this.country_id,
-                this.tva,
-                this.created_at,
-                this.updated_at
-            ])
-            
-           
-            const data = {
-                name:this.name,
-                type_id : this.type_id,
-                country_id : this.country_id, 
-                tva : this.tva,
-                created_at : this.created_at,
-                updated_at : this.created_at,
-            }
-
-            
-            return  data 
-
+            const companyCreate = await Company.create(data)                
+            return companyCreate
+                   
         } catch (error) {
-            console.error(error)
-            res.status(500).json({ error: "Internal server error" })
+                console.error(error)
         }
     }
     /**
@@ -131,71 +75,75 @@ class Companies {
      * @param res 
      * @returns return 200 is sucess + data / return 400 is company Id no found
      */
-    public updateCompany =  async (id:number,data:any,  req:Request , res:Response) =>{
+    public static updateCompany =  async (id:number,data:any,  req:Request , res:Response) =>{
 
-        const isExistCompany = await this.isExist('',id) as any         
+        try {
+          const updated_at = formatDate(new Date())        
 
-        if(isExistCompany.length === 0)
-            return false
+           const companyUpdate = await Company.update(
+            {...data,updated_at},
+            {where: {id:id}}
+           )
 
-        data.updated_at = this.updated_at
-        const fields = Object.keys(data).map(key => `${key} = ?`).join(', ')        
-
-        const query = `
-            UPDATE companies
-            SET ${fields}
-            WHERE id = ?
-        `        
-        const copanyUpdate = await this.pool.query(query,[...Object.values(data), id])        
+           return companyUpdate          
+        } catch (error) {
+                console.error(error)
+        }       
     }
 
-    /**
+   /**
      * delete de company with id 
      * @param id  company
      * @param req 
      * @param res 
      * @returns Return company data or indicate that the company does not exist if the company is not found in the companies table.
      */
-    public deleteCompany = async (id:number , req: Request, res: Response): Promise<any> => {
+   public static deleteCompany = async (id:number , req: Request, res: Response): Promise<any> => {
         
         try {
-            const isExistCompany = await this.isExist('',id) as any
-            
-            if(isExistCompany.length === 0)
-                return false
-
-            const query = `
-            DELETE 
-            FROM companies 
-            WHERE id = ?`
-
-            const [company] = await this.pool.query(query, [id])            
-            return company 
-
+            const companyDelete = await Company.destroy({where : {id} })
+            return companyDelete
         } catch (error) {
             console.error(error)
-            res.status(500).json({ error: "Internal server error" })
         }
-    }
-    /**
-     * Check if the company exist with de tva or id 
-     * @param tva in the company
-     * @param id ithe company
-     * @returns data company
-     */
-    public isExist = async (tva?: any, id?: number): Promise<any> => {
-
-        const queryCompanyIsExist = `
-                SELECT companies.name,companies.tva, companies.id
-                FROM companies
-                WHERE companies.tva = ? OR companies.id = ?`;
-
-        const [isExist] = await this.pool.query(queryCompanyIsExist, [tva, id]);
-
-        return isExist
-
-    }
+    }   
 }
 
-export default Companies
+Company.init({
 
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    name: {
+        type: DataTypes.STRING,
+    },
+    type_id: {
+        type: DataTypes.INTEGER,
+    },
+    country_id: {
+        type: DataTypes.INTEGER,
+    },
+    tva: {
+        type: DataTypes.STRING
+    },
+    created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+
+},
+    {
+        sequelize,
+        modelName: 'Company',
+        tableName: 'companies',
+        timestamps: false,
+    },
+)
+
+export default Company

@@ -20,11 +20,22 @@ router.get('/', (req: Request, res: Response) => {
  *     tags:
  *       - Companies
  *     description: Get all companies
+ *     parameters:
+ *       - name: limit
+ *         in: path
+ *         description: limit view invoices
+ *         schema:
+ *           type: integer
+ *       - name: offset
+ *         in: path
+ *         description: offset view invoices
+ *         schema:
+ *           type: integer
  *     responses: 
  *       200: 
  *         description: Success
  */
-// router.get('/companies',CompanyControllers.viewAll)
+ router.get('/companies/:limit/:offset/',CompanyControllers.viewAll)
 
 /**
  * @openapi
@@ -46,7 +57,7 @@ router.get('/', (req: Request, res: Response) => {
  *       404:
  *         description: Company not found
  */
-// router.get('/companies/:id',CompanyControllers.view)
+router.get('/companies/:id',CompanyControllers.view)
 
 /**
  * @openapi
@@ -84,7 +95,7 @@ router.get('/', (req: Request, res: Response) => {
  *       409:
  *         description: The VAT is already recorded for a company. 
  */
-// router.post('/companies', CompanyControllers.create)
+router.post('/companies', CompanyControllers.create)
 
 /**
  * @openapi
@@ -133,7 +144,7 @@ router.get('/', (req: Request, res: Response) => {
  *       400:
  *         description: Company not found        
  */
-// router.patch('/companies/:id',CompanyControllers.update)
+router.patch('/companies/:id',CompanyControllers.update)
 
 /**
  * @openapi
@@ -155,7 +166,7 @@ router.get('/', (req: Request, res: Response) => {
  *     404:
  *       description: Company not found    
  */
-// router.delete('/companies/:id',CompanyControllers.deleteCompany)
+router.delete('/companies/:id',CompanyControllers.deleteCompany)
 
 // Route Countries
 

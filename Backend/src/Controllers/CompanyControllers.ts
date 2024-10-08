@@ -3,9 +3,10 @@ import { Request, Response } from 'express'
 import Companies from '../Models/CompanyModels'
 import {validatorCompany} from '../utils/validator'
 
-const viewAll = async (req: Request, res: Response): Promise<Response> => {
+const viewAll = async (req: Request, res: Response) => {
     try {
-        const companies = await new Companies().getCompanies(req, res)
+        const { limit, offset } = req.params
+        const companies = await Companies.getCompanies(parseInt(limit), parseInt(offset),req,res)
 
         console.log('GET Companies')
         return res.status(200).json({companies : companies})
@@ -21,7 +22,9 @@ const view = async (req: Request, res: Response) => {
     const companyId = parseInt(id)   
     
     try {
-        const company = await new Companies().getCompany(companyId,req,res)
+        const company = await Companies.getCompany(companyId,req,res)
+
+        if(company == null) return res.status(400).json({message : 'Company non found!'})
 
         console.log(`GET Company ID:${id}`)
         return res.status(200).json({companies : company})
@@ -38,21 +41,13 @@ const create = async (req: Request, res: Response) => {
     
     const { error, value } = validatorCompany(req.body)
 
-    if (error) {
-        return res.status(400).send(error.details)
-    }
+    if (error)  return res.status(400).send(error.details)
 
     try {
-        const company = new Companies(
-            value.name,
-            value.type_id,
-            value.country_id,
-            value.tva
-        )
-        const companyCreated = await company.postCompany(req,res)  
+
+        const companyCreated = await Companies.postCompany(value,req,res)  
         
-        if(!companyCreated)
-            return res.status(409).json({ error: `La TVA est déjà enregistrée` })
+        if(companyCreated === null) return res.status(409).json({ error: `La TVA est déjà enregistrée` })
         
         console.log(`POST Company ${value.name}`)
         return res.status(201).json({ message: 'Company created successfully', data: companyCreated })
@@ -69,30 +64,24 @@ const update =  async(req:Request,res:Response) =>{
     const companyId = parseInt(id)
     
     const { error, value } = validatorCompany(req.body)
-    if (error) {
-        return res.status(400).send(error.details)
-    }
+    if(error) return res.status(400).send(error.details)  
 
-    const companyUpdate = new Companies().updateCompany(companyId,value,req,res)
+    const companyUpdate = await Companies.updateCompany(companyId,value,req,res) as any
 
-    if(!companyUpdate)
-        return res.status(400).json({message: "Company no found!"})
+    if(companyUpdate === 0)return res.status(400).json({message: "Company no found!"})
 
     console.log(`Patch company #${id}`)  
-    return res.status(200).json({message :  `Company #${id} update successsfully!`})
+    return res.status(200).json({message :  `Company #${id} update successsfully!`,data : value})
 
 }
 
 const deleteCompany = async (req :Request , res:Response) =>{
    
     const { id } = req.params
-    const companyId = parseInt(id)
-
     try {
-        const companyDelete = await new Companies().deleteCompany(companyId,req,res) 
+        const companyDelete = await Companies.deleteCompany(parseInt(id),req,res) 
 
-        if(!companyDelete)
-            return res.status(400).json({message: "Company no found!"})    
+        if(companyDelete === 0) return res.status(400).json({message: "Company no found!"})    
 
         console.log(`DEKLETE Company ID:${id}`)
         return res.status(201).json({ message: 'Company Deleted successfully' })   

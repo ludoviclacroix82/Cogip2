@@ -1,9 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import route from './Routes/route'
-import connectToDatabase from './utils/_connect'
 import db from './utils/db'
-import { error } from 'console'
 const cors = require('cors')
 // Activer CORS pour toutes les origines
 
@@ -18,7 +16,6 @@ dotenv.config()
 const app = express()
 app.use(cors())
 const PORT = process.env.PORT || 3000
-// connectToDatabase()
 db.sync()
   .then(() => {
     console.log('Connected to the database');
