@@ -2,7 +2,7 @@
 <script setup lang="ts">
 /** componnents */
 import InvoicesList from '@/components/Invoices/invoicesHome.vue'
-import ComapniesList from '@/components/Companies/comapnies.vue'
+import CompaniesList from '@/components/Companies/comapnies.vue'
  
 /** image */
 import HeaderImgFont from '@/components/image/Rectangle_10.png'
@@ -15,7 +15,7 @@ import HeaderImgFont from '@/components/image/Rectangle_10.png'
   <main class="w-full flex justify-centerm-auto py-16">
     <div class="w-full flex justify-center items-center flex-col ">
       <InvoicesList />
-      <ComapniesList />
+      <CompaniesList />
     </div>    
   </main>
 </template>

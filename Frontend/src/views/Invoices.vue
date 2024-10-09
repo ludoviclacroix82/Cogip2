@@ -2,7 +2,7 @@
 <script setup lang="ts">
 /** componnents */
 import InvoicesList from '@/components/Invoices/invoices.vue'
- 
+import Paginate from '@/components/Paginate/paginate.vue';
 /** image */
 import HeaderImgFont from '@/components/image/Rectangle_10.png'
 </script>
