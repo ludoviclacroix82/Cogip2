@@ -14,9 +14,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="invoice in invoices" :key="invoice.id">
-              <td class="py-2 px-4 border-b border-gray-300">{{ invoice.ref }}</td>
-              <td class="py-2 px-4 border-b border-gray-300">{{ invoice.company }}</td>
+            <tr v-for="invoice in invoices" :key="invoice.id" class="hover:bg-gray-100">
+              <td class="py-2 px-4 border-b border-gray-300">
+                <RouterLink :to="`/invoice/${invoice.ref}`">{{ invoice.ref }}</RouterLink>                
+            </td>
+              <td class="py-2 px-4 border-b border-gray-300">{{ invoice.Company ? invoice.Company.name : 'N/A' }}</td>
               <td class="py-2 px-4 border-b border-gray-300">{{ invoice.price }}</td>
               <td class="py-2 px-4 border-b border-gray-300">{{ invoice.created_at }}</td>
               <td class="py-2 px-4 border-b border-gray-300">{{ invoice.updated_at }}</td>

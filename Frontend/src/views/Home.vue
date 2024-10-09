@@ -4,7 +4,7 @@
 import InvoicesList from '@/components/Invoices/invoices.vue'
  
 /** image */
-import HeaderImgFont from '@/components/image/Rectangle 10.png'
+import HeaderImgFont from '@/components/image/Rectangle_10.png'
 </script>
 
 <template>
