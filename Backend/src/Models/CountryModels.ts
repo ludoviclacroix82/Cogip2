@@ -1,133 +1,86 @@
 // src/Models/CountryModels.ts
-import { Response, Request } from 'express'
-import connectToDatabase from '../utils/_connect'
+import { DataTypes,Model } from "sequelize"
+import { Request, Response } from 'express'
+import sequelize from '../utils/db'
 
-const { formatDate } = require('../utils/utils')
+class Country extends Model{
 
-class Country {
-    public name?: string
-    public initials?: string
-    public created_at?: Date
-    public updated_at?: Date
-
-    public pool = connectToDatabase()
-
-    constructor(name?: string, initials?: string,) {
-        this.name = name
-        this.initials = initials
-        this.created_at = formatDate(new Date())
-        this.updated_at = formatDate(new Date())
-    }
-    /**
-     * Get All country in the coutry table
-     * @param req 
-     * @param res 
-     * @returns datas countries
-     */
-    public getCountries = async (req: Request, res: Response): Promise<any> => {
-
+    public static getCountries = async (req: Request, res: Response) => {
         try {
-            const query = `
-                SELECT *
-                FROM country
-                ORDER BY name ASC`
+           const countries = await Country.findAll()
+           return countries
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
-            const [countries] = await this.pool.query(query)
+    public static getCountry = async (id:number, req: Request, res: Response) => {
+        try {
+            const countries = await Country.findOne({where: {id}})
             return countries
+         } catch (error) {
+             console.error(error)
+         }
+    }
+    public static postCountry = async (data:any,req: Request, res: Response) => {
+        try {
+            const countryIsExist = await Country.findOne({
+                where: {
+                    initials : data.initials
+                }
+            })
+            
+            if(countryIsExist) return null
+
+            const countryCreate = await Country.create({ ...data})
+            return countryCreate   
 
         } catch (error) {
-            console.error(error)
+            console.log(error)            
         }
     }
-
-    public getCountry = async (id: number, req: Request, res: Response): Promise<any> => {
+    public static deleteCountry = async (id:number,req: Request, res: Response) => {
         try {
-            const query = `
-                SELECT *
-                FROM country
-                WHERE id = ?`
+            const countryIsExist = await Country.findOne({where: {id} })            
+            if(countryIsExist) return null
 
-            const [country] = await this.pool.query(query, [id]) as any
-
-            if (country.length === 0)
-                return false
-
-            return country
+            const countryDelete = await Country.destroy({where: {id}})
+            return countryDelete
         } catch (error) {
-            console.error(error)
+            console.log(error)
+            
         }
-    }
 
-    public postCountry = async (req: Request, res: Response): Promise<any> => {
-        try {
-
-            const isExistCountry = await this.isExist(this.initials, 0) as any
-
-            if (isExistCountry.length > 0)
-                return false
-
-            const query = `
-                INSERT 
-                INTO country(name,initials,created_at,updated_at) 
-                VALUES (?,?,?,?)`
-
-            const [country] = await this.pool.query(query, [
-                this.name,
-                this.initials,
-                this.created_at,
-                this.updated_at]
-            )
-
-            const data = {
-                name: this.name,
-                initials: this.initials,
-                created_at: this.created_at,
-                updated_at: this.updated_at
-            }
-           
-            return data
-
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    public deleteCountry = async (id: number, req: Request, res: Response): Promise<any> => {
-
-        try {
-
-            const isExistCountry = await this.isExist('', id) as any
-
-            if (isExistCountry.length === 0)
-                return false
-
-            const query = `
-                DELETE 
-                FROM country
-                WHERE id = ? `
-
-            const [country] = await this.pool.query(query, [id])
-            return country
-
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    public isExist = async (initials?: string, id?: number) => {
-
-        try {
-            const query = `
-                SELECT name
-                FROM country
-                WHERE initials = ? OR id = ?`
-
-            const [isExist] = await this.pool.query(query, [initials, id])
-            return isExist
-        } catch (error) {
-
-        }
     }
 }
+
+Country.init({
+        id:{
+            type: DataTypes.STRING,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        name:{
+            type: DataTypes.STRING,
+        },
+        initials:{
+            type:DataTypes.STRING,
+        },
+        created_at: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+        },
+        updated_at: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+        },
+    },
+    {
+        sequelize,
+        modelName: 'Country',
+        tableName: 'country',
+        timestamps: false,
+    },
+)
 
 export default Country
