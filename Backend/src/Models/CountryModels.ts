@@ -56,7 +56,7 @@ class Country extends Model{
 
 Country.init({
         id:{
-            type: DataTypes.STRING,
+            type: DataTypes.NUMBER,
             primaryKey: true,
             autoIncrement: true,
         },

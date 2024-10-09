@@ -2,6 +2,8 @@
 import { DataTypes, Model } from 'sequelize'
 import { Request, Response } from 'express'
 import sequelize from '../utils/db'
+import Country from './CountryModels'
+import Type from './TypeModels'
 
 const { formatDate } = require('../utils/utils')
 
@@ -19,6 +21,16 @@ class Company extends Model {
                 limit: limit,
                 offset: offset,
                 order: [['created_at', 'DESC']],
+                include: [
+                    {
+                        model: Country,
+                        attributes: ['initials','name'],
+                    },
+                    {
+                        model:Type,
+                        attributes:['name',]
+                    }
+                ],
             })
             return companies
         } catch (err) {
@@ -120,9 +132,17 @@ Company.init({
     },
     type_id: {
         type: DataTypes.INTEGER,
+        references:{
+            model:Type,
+            key : 'id'
+        }
     },
     country_id: {
         type: DataTypes.INTEGER,
+        references:{
+            model:Country,
+            key:'id',
+        }
     },
     tva: {
         type: DataTypes.STRING
@@ -145,4 +165,9 @@ Company.init({
     },
 )
 
+// Établir la relation
+Company.belongsTo(Country, { foreignKey: 'country_id' })
+Country.hasMany(Company, { foreignKey: 'country_id' })
+Company.belongsTo(Type, { foreignKey: 'type_id' })
+Type.hasMany(Company, { foreignKey: 'type_id' })
 export default Company

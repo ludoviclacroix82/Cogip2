@@ -90,8 +90,7 @@ Invoice.init({
         type: DataTypes.INTEGER,
         references: {
             model: Company,
-            key: 'id',
-            
+            key: 'id',            
         },
     },
     price: {
