@@ -20,7 +20,7 @@
                 <td class="py-2 px-4 border-b border-gray-300">
                     <RouterLink :to="{ name: 'companiesHome', params: { id: company.id } }">{{ company.name }}</RouterLink>                
                 </td>
-                <td class="py-2 px-4 border-b border-gray-300">{{ company.type_id }}</td>
+                <td class="py-2 px-4 border-b border-gray-300">{{ company.Type.name }}</td>
                 <td class="py-2 px-4 border-b border-gray-300" :title="company.Country.name">{{ company.Country.initials }}</td>
                 <td class="py-2 px-4 border-b border-gray-300">{{ company.tva}}</td>
                 <td class="py-2 px-4 border-b border-gray-300">{{ company.created_at }}</td>
