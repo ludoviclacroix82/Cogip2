@@ -1,5 +1,7 @@
 // src/Models/CompaniesModels
 
+import { log } from "console"
+
 class Company{
 
     public id?:number
@@ -23,7 +25,9 @@ class Company{
     public getCompanies = async (limit: number , offset:number) =>{
 
         try {
-            const response = await fetch(`http://localhost:3000/companies/${limit}/${offset}`)
+            const Url = process.env.VUE_APP_URL_API
+            const response = await fetch(`${Url}/companies/${limit}/${offset}`)
+
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`)
             }  

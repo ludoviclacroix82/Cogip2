@@ -18,7 +18,7 @@
             <tr v-for="company in companies" :key="company.id" class="hover:bg-gray-100">
                 <td class="py-2 px-4 border-b border-gray-300">{{ company.id}}</td>
                 <td class="py-2 px-4 border-b border-gray-300">
-                    <RouterLink :to="`/comapnies/${company.id}`">{{ company.name }}</RouterLink>                
+                    <RouterLink :to="{ name: 'companiesHome', params: { id: company.id } }">{{ company.name }}</RouterLink>                
                 </td>
                 <td class="py-2 px-4 border-b border-gray-300">{{ company.type_id }}</td>
                 <td class="py-2 px-4 border-b border-gray-300">{{ company.country_id }}</td>
@@ -47,8 +47,7 @@
         const limit = 5
         const offset = 0
         const response = await companyModel.getCompanies(limit,offset)
-        console.log(response.companies)
-        
+       
         this.companies = response.companies    
       } catch (error) {
         console.error("Error fetching companies:", error)

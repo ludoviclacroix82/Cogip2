@@ -6,3 +6,8 @@ declare module '*.vue' {
     export default component;
   }
   
+  declare namespace NodeJS {
+    interface ProcessEnv {
+      VUE_APP_URL_API: string;
+    }
+  }
