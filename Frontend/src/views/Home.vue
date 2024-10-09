@@ -2,6 +2,7 @@
 <script setup lang="ts">
 /** componnents */
 import InvoicesList from '@/components/Invoices/invoices.vue'
+import ComapniesList from '@/components/Companies/comapnies.vue'
  
 /** image */
 import HeaderImgFont from '@/components/image/Rectangle_10.png'
@@ -11,7 +12,10 @@ import HeaderImgFont from '@/components/image/Rectangle_10.png'
     <header class="relative bg-[#F9DE4E] w-full h-[580px] flex justify-center">
     <img class="absolute bottom-0" :src="HeaderImgFont" alt="" >
   </header>
-  <main class="w-full flex justify-center py-16">
-    <InvoicesList />
+  <main class="w-full flex justify-centerm-auto py-16">
+    <div class="w-full flex justify-center items-center flex-col ">
+      <InvoicesList />
+      <ComapniesList />
+    </div>    
   </main>
 </template>

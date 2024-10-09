@@ -2,7 +2,6 @@
     <div class="w-3/4 flex flex-col">
       <h2 class="text-black text-4xl font-bold from-black-700">Last invoices</h2>
       <div class="w-full py-10">
-        {{ invoices.invoices }}
         <table class="min-w-full">
           <thead>
             <tr class="bg-[#F9DE4E] text-black font-semibold text-left">
@@ -30,7 +29,7 @@
   </template>
   
   <script>
-  import Invoice from '../../Models/InvoicesModels'
+  import Invoice from '@/Models/InvoicesModels'
   
   export default {
     data() {

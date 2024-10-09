@@ -1,6 +1,4 @@
 // src/Models/invoicesModels
-
-
 class Invoice {
 
     public id?:number
@@ -24,8 +22,7 @@ class Invoice {
 
     public getInvoices =  async (limit: number , offset:number) =>{
 
-        try {   
-            
+        try {               
             const response = await fetch(`http://localhost:3000/invoices/${limit}/${offset}`)                    
                        
             if (!response.ok) {
@@ -36,7 +33,6 @@ class Invoice {
 
         } catch (error) {
             console.log(error)
-            
         }
     }
 }
