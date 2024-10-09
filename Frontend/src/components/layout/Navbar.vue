@@ -3,8 +3,8 @@
         <div class="w-[80%] flex items-center ">
             <div class="font-bold text-4xl w-1/4">COGIP</div>
             <div class="w-2/4 text-xl space-x-4 font-bold">
-                <a class="p-2 hover:border border-gray-950" href="">Home</a>
-                <a class="p-2 hover:border border-gray-950" href="">Invoices</a>
+                <a class="p-2 hover:border border-gray-950" href="/">Home</a>
+                <RouterLink class="p-2 hover:border border-gray-950" :to="{ name: 'invoicesIndex' }">Invoices</RouterLink>  
                 <a class="p-2 hover:border border-gray-950" href="">Companies</a>
                 <a class="p-2 hover:border border-gray-950" href="">Contacts</a>
             </div>
