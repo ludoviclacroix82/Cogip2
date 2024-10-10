@@ -2,11 +2,14 @@
 <script setup lang="ts">
 /**  components */
 import CompaniesList from "@/components/Companies/comapnies.vue"
-/** image */
-import HeaderImgFont from '@/components/image/Rectangle_10.png'
+import NavBar from "@/components/layout/Navbar.vue"
+/** images */
+import HeaderImgFont from '@/images/Rectangle_10.png'
+
 </script>
 
 <template>
+  <NavBar />
   <header class="relative bg-[#F9DE4E] w-full h-[290px] flex justify-center">
     <img class="absolute bottom-0" :src="HeaderImgFont" alt="" >
   </header>

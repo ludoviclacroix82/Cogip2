@@ -1,13 +1,15 @@
 <!-- /src/view/Home -->
 <script setup lang="ts">
 /**  components */
+import NavBar from '@/components/layout/Navbar.vue'
 import InvoicesList from '@/components/Invoices/invoices.vue'
-/** image */
-import HeaderImgFont from '@/components/image/Rectangle_10.png'
+/** images */
+import HeaderImgFont from '@/images/Rectangle_10.png'
 </script>
 
 <template>
-    <header class="relative bg-[#F9DE4E] w-full h-[290px] flex justify-center">
+  <NavBar />
+  <header class="relative bg-[#F9DE4E] w-full h-[290px] flex justify-center">
     <img class="absolute bottom-0" :src="HeaderImgFont" alt="" >
   </header>
   <main class="w-full flex justify-center m-auto py-16">
