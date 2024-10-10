@@ -1,7 +1,7 @@
 <!-- /src/view/Home -->
 <script setup lang="ts">
 /** componnents */
-import InvoicesList from '@/components/Invoices/invoicesHome.vue'
+import InvoicesList from '@/components/Invoices/invoices.vue'
 import CompaniesList from '@/components/Companies/comapnies.vue'
  
 /** image */
@@ -14,7 +14,7 @@ import HeaderImgFont from '@/components/image/Rectangle_10.png'
   </header>
   <main class="w-full flex justify-centerm-auto py-16">
     <div class="w-full flex justify-center items-center flex-col ">
-      <InvoicesList />
+      <InvoicesList :limit="5" :offset="0" :paginateView="false" />
       <CompaniesList />
     </div>    
   </main>

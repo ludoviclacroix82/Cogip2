@@ -7,7 +7,7 @@
         <hr class="w-[200px] h-[20px] bg-[#F9DE4E] relative bottom-4 left-20 z-0" />
       </div>
       <div class="w-full py-10">
-        <Paginate :page="page" :pages="pages" @updatePage="updatePage" />
+        <Paginate v-if="paginateView === true" :page="page" :pages="pages" @updatePage="updatePage" />
         <table class="min-w-full">
           <thead>
             <tr class="bg-[#F9DE4E] text-black font-semibold text-left">
@@ -41,17 +41,29 @@
   import Invoice from '@/Models/InvoicesModels'  
   import Paginate from '@/components/Paginate/paginate.vue'
 
-
-
   export default {
     components: {
     Paginate,
   },
+    props: {
+      limit: {
+        type: Number,
+        required: true,
+      },
+      offset: {
+        type: Number,
+        required: true,
+      },
+      paginateView: {
+        type: Boolean,
+        required: true,
+      },
+    },
   data() {
     return {
       invoices: [],
-      limit: 15,
-      offset: 0,
+      //limit: 15,
+      //offset: 0,
       page: 1,
       records: 0,
       pages: 0,

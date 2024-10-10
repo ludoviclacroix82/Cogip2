@@ -10,7 +10,7 @@ class Invoice extends Model {
     public getInvoices = async (limit: number, offset: number, req: Request, res: Response) => {
 
         try {
-            const invoices = await Invoice.findAll({
+            const invoices = await Invoice.findAndCountAll({
                 limit: limit,
                 offset: offset,
                 order: [['created_at', 'DESC']],
@@ -72,6 +72,16 @@ class Invoice extends Model {
             return invoiceDelete            
         } catch (error) {
             console.log(error)            
+        }
+    }
+    public invoiceCount = async (req:Request , res:Response) =>{
+        try {
+
+
+            
+        } catch (error) {
+            console.log(error);
+            
         }
     }
 }

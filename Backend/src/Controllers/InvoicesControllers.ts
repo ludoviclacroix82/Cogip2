@@ -11,15 +11,15 @@ const viewAll = async (req: Request, res: Response) => {
     try {
         const { limit, offset } = req.params
 
-        const invoices = await new Invoices().getInvoices(parseInt(limit), parseInt(offset), req, res) as any
-
-        for (const invoice of invoices) {
+        const {count ,rows} = await new Invoices().getInvoices(parseInt(limit), parseInt(offset), req, res) as any      
+        
+        for (const invoice of rows) {
             invoice['created_at'] = formatDate(invoice['created_at'])
             invoice['updated_at'] = formatDate(invoice['updated_at'])
         }
 
         console.log(`Get invoices`)
-        return res.status(200).json({ invoices: invoices })
+        return res.status(200).json({ invoices: rows , count: count})
 
     } catch (error) {
         return res.status(500).json({ message: 'Internal Server Error' })
