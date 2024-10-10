@@ -34,7 +34,7 @@
   </template>
   
   <script>
-  import company from '@/Models/CompaniesModels'
+  import Company from '@/Models/CompaniesModels'
   import Paginate from "@/components/Paginate/paginate.vue";
   
   export default {
@@ -43,10 +43,6 @@
     },
     props: {
       limit: {
-        type: Number,
-        required: true,
-      },
-      offset: {
         type: Number,
         required: true,
       },
@@ -61,10 +57,11 @@
         page: 1,
         records: 0,
         pages: 0,
+        offset: 0,
       }
     },
     async created() {
-      const companyModel = new company()
+      const companyModel = new Company()
       try {
         const response = await companyModel.getCompanies(this.limit,this.offset)
         this.companies = response.companies
@@ -76,14 +73,14 @@
     },
     methods: {
       async fetchUpdate() {
-        const invoiceModel = new Invoice()
+        const companyModel = new Company()
         try {
-          const response = await invoiceModel.getInvoices(this.limit, this.offset)
-          this.invoices = response.invoices
+          const response = await companyModel.getCompanies(this.limit,this.offset)
+          this.companies = response.companies
           this.records = response.count
           this.pages = Math.ceil(this.records / this.limit)
         } catch (error) {
-          console.error( error)
+          console.error(error)
         }
       },
       updatePage(newPage) {

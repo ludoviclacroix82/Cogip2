@@ -50,10 +50,6 @@
         type: Number,
         required: true,
       },
-      offset: {
-        type: Number,
-        required: true,
-      },
       paginateView: {
         type: Boolean,
         required: true,
@@ -65,6 +61,7 @@
       page: 1,
       records: 0,
       pages: 0,
+      offset : 0,
     }
   },
   async created() {

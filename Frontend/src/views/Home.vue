@@ -14,8 +14,8 @@ import HeaderImgFont from '@/components/image/Rectangle_10.png'
   </header>
   <main class="w-full flex justify-center m-auto py-16">
     <div class="w-full flex justify-center items-center flex-col ">
-      <InvoicesList :limit="5" :offset="0" :paginateView="false" />
-      <CompaniesList :limit="5" :offset="0" :paginateView="false"/>
+      <InvoicesList :limit="5" :paginateView="false" />
+      <CompaniesList :limit="5" :paginateView="false"/>
     </div>    
   </main>
 </template>
