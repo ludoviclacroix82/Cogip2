@@ -1,6 +1,6 @@
 <script setup>
 import ImageProfil from '../../images/user-profile.png'
-import { UserIcon , HomeIcon , ClipboardIcon     } from '@heroicons/vue/24/outline'
+import { UserIcon , HomeIcon , ClipboardIcon } from '@heroicons/vue/24/outline'
 
 </script>
 <template>
