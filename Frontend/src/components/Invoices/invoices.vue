@@ -62,8 +62,6 @@
   data() {
     return {
       invoices: [],
-      //limit: 15,
-      //offset: 0,
       page: 1,
       records: 0,
       pages: 0,

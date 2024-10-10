@@ -6,10 +6,10 @@ import {validatorCompany} from '../utils/validator'
 const viewAll = async (req: Request, res: Response) => {
     try {
         const { limit, offset } = req.params
-        const companies = await Companies.getCompanies(parseInt(limit), parseInt(offset),req,res)
+        const {count ,rows} = await Companies.getCompanies(parseInt(limit), parseInt(offset),req,res) as any
 
         console.log('GET Companies')
-        return res.status(200).json({companies : companies})
+        return res.status(200).json({companies : rows, count: count})
     } catch (error: any) {
         console.error("Error fetching companies:", error)
         return res.status(500).json({ error: 'An error occurred while fetching companies' })

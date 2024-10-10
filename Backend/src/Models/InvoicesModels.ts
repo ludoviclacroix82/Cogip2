@@ -57,7 +57,7 @@ class Invoice extends Model {
         try {
             const invoiceUpdate = await Invoice.update(
                 { ...data},
-                {where: {ref}},
+                { where: {ref} },
             )
             return invoiceUpdate
         } catch (error) {

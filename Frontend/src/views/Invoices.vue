@@ -1,6 +1,6 @@
 <!-- /src/view/Home -->
 <script setup lang="ts">
-/**  componnents */
+/**  components */
 import InvoicesList from '@/components/Invoices/invoices.vue'
 /** image */
 import HeaderImgFont from '@/components/image/Rectangle_10.png'

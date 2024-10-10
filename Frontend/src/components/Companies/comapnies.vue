@@ -1,7 +1,8 @@
 <template>
     <div class="w-3/4 flex flex-col">
-      <h2 class="text-black text-4xl font-bold from-black-700">Last companies</h2>
+      <h2 class="text-black text-4xl font-bold from-black-700">All companies</h2>
       <div class="w-full py-10">
+        <Paginate v-if="paginateView === true" :page="page" :pages="pages" @updatePage="updatePage" />
         <table class="min-w-full">
           <thead>
             <tr class="bg-[#F9DE4E] text-black font-semibold text-left">
@@ -34,24 +35,62 @@
   
   <script>
   import company from '@/Models/CompaniesModels'
+  import Paginate from "@/components/Paginate/paginate.vue";
   
   export default {
+    components: {
+      Paginate,
+    },
+    props: {
+      limit: {
+        type: Number,
+        required: true,
+      },
+      offset: {
+        type: Number,
+        required: true,
+      },
+      paginateView: {
+        type: Boolean,
+        required: true,
+      },
+    },
     data() {
       return {
         companies: [],
+        page: 1,
+        records: 0,
+        pages: 0,
       }
     },
     async created() {
       const companyModel = new company()
       try {
-        const limit = 5
-        const offset = 0
-        const response = await companyModel.getCompanies(limit,offset)
-       
-        this.companies = response.companies    
+        const response = await companyModel.getCompanies(this.limit,this.offset)
+        this.companies = response.companies
+        this.records = response.count
+        this.pages = Math.ceil(this.records / this.limit)
       } catch (error) {
-        console.error("Error fetching companies:", error)
+        console.error(error)
       }
-    }
+    },
+    methods: {
+      async fetchUpdate() {
+        const invoiceModel = new Invoice()
+        try {
+          const response = await invoiceModel.getInvoices(this.limit, this.offset)
+          this.invoices = response.invoices
+          this.records = response.count
+          this.pages = Math.ceil(this.records / this.limit)
+        } catch (error) {
+          console.error( error)
+        }
+      },
+      updatePage(newPage) {
+        this.page = newPage;
+        this.offset = (this.page - 1) * this.limit;
+        this.fetchUpdate();
+      },
+    },
   }
   </script>

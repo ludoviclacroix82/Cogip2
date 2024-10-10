@@ -1,6 +1,6 @@
 <!-- /src/view/Home -->
 <script setup lang="ts">
-/** componnents */
+/** components */
 import InvoicesList from '@/components/Invoices/invoices.vue'
 import CompaniesList from '@/components/Companies/comapnies.vue'
  
@@ -12,10 +12,10 @@ import HeaderImgFont from '@/components/image/Rectangle_10.png'
     <header class="relative bg-[#F9DE4E] w-full h-[580px] flex justify-center">
     <img class="absolute bottom-0" :src="HeaderImgFont" alt="" >
   </header>
-  <main class="w-full flex justify-centerm-auto py-16">
+  <main class="w-full flex justify-center m-auto py-16">
     <div class="w-full flex justify-center items-center flex-col ">
       <InvoicesList :limit="5" :offset="0" :paginateView="false" />
-      <CompaniesList />
+      <CompaniesList :limit="5" :offset="0" :paginateView="false"/>
     </div>    
   </main>
 </template>

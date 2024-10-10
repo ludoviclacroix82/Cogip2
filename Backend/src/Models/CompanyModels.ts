@@ -17,7 +17,7 @@ class Company extends Model {
     public static getCompanies = async (limit: number, offset: number, req: Request, res: Response) => {
 
         try {
-            const companies = await Company.findAll({
+            const companies = await Company.findAndCountAll({
                 limit: limit,
                 offset: offset,
                 order: [['created_at', 'DESC']],
