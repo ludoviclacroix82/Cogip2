@@ -1,9 +1,11 @@
 // routes/route.ts
 import { Router, Request, Response } from 'express'
+import {viewAll} from "../Controllers/TypesControllers";
 
 const CompanyControllers = require('../Controllers/CompanyControllers')
 const CountryControllers = require('../Controllers/CountryControllers')
 const InvoicesControllers = require('../Controllers/InvoicesControllers')
+const TypesControllers = require('../Controllers/TypesControllers')
 
 const router = Router()
 
@@ -302,6 +304,7 @@ router.get('/invoices/:limit/:offset/',InvoicesControllers.viewAll)
  *         description: Invoice no found
  */
 router.get('/invoices/:ref',InvoicesControllers.view)
+
 /**
  * @openapi
  * /invoices:
@@ -390,5 +393,19 @@ router.patch('/invoices/:ref',InvoicesControllers.update)
  *         description: Invoice not found
  */
 router.delete('/invoices/:ref',InvoicesControllers.deleteInvoice)
+
+/** Types */
+/**
+ * @openapi
+ * /types:
+ *   get:
+ *    tags:
+ *     - Types
+ *    description: Get All Types
+ *    responses:
+ *     200:
+ *       description: sucess
+ */
+router.get('/types',TypesControllers.viewAll)
 
 export default router

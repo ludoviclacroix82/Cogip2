@@ -1,7 +1,22 @@
-import { DataType,DataTypes,Model } from "sequelize"
+import { DataTypes,Model } from "sequelize"
 import sequelize from "../utils/db"
+import {Request, Response} from "express";
 
 class Type extends Model{
+
+    public static getTypes = async (req: Request, res: Response ) =>{
+
+        try {
+            const types = await Type.findAll(
+                {
+                    order: [['name', 'Asc']],
+                }
+            )
+            return types
+        }catch (error) {
+            console.error(error)
+        }
+    }
 
 }
 

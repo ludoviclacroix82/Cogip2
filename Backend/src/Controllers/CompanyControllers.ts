@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import Companies from '../Models/CompanyModels'
 import {validatorCompany} from '../utils/validator'
 
-const viewAll = async (req: Request, res: Response) => {
+const viewAll = async (req: Request, res: Response):Promise<Response> => {
     try {
         const { limit, offset } = req.params
         const {count ,rows} = await Companies.getCompanies(parseInt(limit), parseInt(offset),req,res) as any
@@ -16,7 +16,7 @@ const viewAll = async (req: Request, res: Response) => {
     }
 }
 
-const view = async (req: Request, res: Response) => {
+const view = async (req: Request, res: Response):Promise<Response> => {
 
     const { id } = req.params
     const companyId = parseInt(id)   
@@ -37,7 +37,7 @@ const view = async (req: Request, res: Response) => {
 
 }
 
-const create = async (req: Request, res: Response) => {
+const create = async (req: Request, res: Response):Promise<Response> => {
     
     const { error, value } = validatorCompany(req.body)
 
@@ -58,7 +58,7 @@ const create = async (req: Request, res: Response) => {
     }
 }
 
-const update =  async(req:Request,res:Response) =>{
+const update =  async(req:Request,res:Response):Promise<Response> =>{
 
     const {id} = req.params
     const companyId = parseInt(id)
@@ -75,7 +75,7 @@ const update =  async(req:Request,res:Response) =>{
 
 }
 
-const deleteCompany = async (req :Request , res:Response) =>{
+const deleteCompany = async (req :Request , res:Response):Promise<Response> =>{
    
     const { id } = req.params
     try {
