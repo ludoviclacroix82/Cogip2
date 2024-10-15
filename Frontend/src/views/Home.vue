@@ -25,7 +25,19 @@ import NavBar from "@/components/layout/Navbar.vue";
   </header>
   <main class="w-full flex justify-center m-auto py-16">
     <div class="w-full flex justify-center items-center flex-col ">
+      <div class="flex flex-col w-3/4 justify-start">
+        <h2 class="text-black text-4xl font-bold from-black-700 z-10">
+          Last invoices
+        </h2>
+        <hr class="w-[200px] h-[20px] bg-[#F9DE4E] relative bottom-4 left-20 z-0" />
+      </div>
       <InvoicesList :limit="5" :paginateView="false" />
+      <div class="flex flex-col w-3/4 justify-start">
+        <h2 class="text-black text-4xl font-bold from-black-700 z-10">
+          Last companies
+        </h2>
+        <hr class="w-[200px] h-[20px] bg-[#F9DE4E] relative bottom-4 left-20 z-0" />
+      </div>
       <CompaniesList :limit="5" :paginateView="false"/>
     </div>    
   </main>

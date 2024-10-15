@@ -15,7 +15,7 @@ import { UserIcon , HomeIcon , ClipboardIcon } from '@heroicons/vue/24/outline'
     </div>
     <!-- Menu -->
     <div class="flex flex-col w-full items-end py-4 ">
-      <RouterLink class="w-4/5 py-2 font-semibold hover:border-[#9698D6] hover:text-[#9698D6] flex items-center" :to="{ name: 'dashboardIndex' }">
+      <RouterLink class="w-4/5 py-2 font-semibold hover:border-r-4 hover:border-[#9698D6] hover:text-[#9698D6] flex items-center" :to="{ name: 'dashboardIndex' }">
         <HomeIcon   class="size-5 mr-2 " />Dashboard
       </RouterLink>
       <RouterLink class="w-4/5 py-2 font-semibold hover:border-r-4 hover:border-[#9698D6] hover:text-[#9698D6] flex items-center"  :to="{ name: 'dashboardIndex' }">

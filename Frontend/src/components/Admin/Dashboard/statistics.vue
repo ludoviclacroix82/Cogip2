@@ -1,6 +1,6 @@
 <template>
-  <div class="w-1/2 bg-white rounded-lg p-5">
-    <h3 class="text-m py-2 font-semibold">Statistics</h3>
+  <div class="bg-white rounded-lg p-5">
+    <h3 class="text-lg py-2 font-semibold">Statistics</h3>
     <div class="w-full p-4 flex justify-around items-center text-center">
       <div class="w-20 h-20 p-3 rounded-full text-s text-white font-semibold bg-[#4D4CAC] flex flex-col items-center justify-center">
         {{numberCompanies}}

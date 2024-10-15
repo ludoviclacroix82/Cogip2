@@ -1,11 +1,5 @@
 <template>
     <div class="w-3/4 flex flex-col">
-      <div class="flex flex-col">
-        <h2 class="text-black text-4xl font-bold from-black-700 z-10">
-          All companies
-        </h2>
-        <hr class="w-[200px] h-[20px] bg-[#F9DE4E] relative bottom-4 left-20 z-0" />
-      </div>
       <div class="w-full py-10">
         <Paginate v-if="paginateView === true" :page="page" :pages="pages" @updatePage="updatePage" />
         <table class="min-w-full">
