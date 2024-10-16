@@ -13,7 +13,7 @@
       <tr v-for="invoice in invoices" class="text-sm text-left space-y-5 h-10">
         <td>{{invoice.ref}}</td>
         <td>{{invoice.price}}</td>
-        <td>{{invoice.Company.name}}</td>
+        <td>{{ invoice.Company ? invoice.Company.name : 'N/A' }}</td>
       </tr>
       </tbody>
     </table>

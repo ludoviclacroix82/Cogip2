@@ -16,7 +16,7 @@
              type="text"
              placeholder="Company name"
              v-model="form.name">
-      <div v-if="form.name === null && submited" class="text-xs text-red-600">*Required</div>
+      <div v-if="form.name === null && submited && isNotValidate" class="text-xs text-red-600">*Required</div>
     </div>
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="tva">
@@ -27,7 +27,7 @@
              type="text"
              placeholder="tva"
              v-model="form.tva">
-      <div v-if="form.tva === null && submited" class="text-xs text-red-600">*Required</div>
+      <div v-if="form.tva === null && submited && isNotValidate" class="text-xs text-red-600">*Required</div>
     </div>
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="country_id">
@@ -39,7 +39,7 @@
         <option value="0" selected disabled >Select Country</option>
         <option v-for="country in countries" :value="country.id">{{country.name}}</option>
       </select>
-      <div v-if="form.country_id === 0 && submited" class="text-xs text-red-600">*Required</div>
+      <div v-if="form.country_id === 0 && submited && isNotValidate" class="text-xs text-red-600">*Required</div>
     </div>
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="type_id">
@@ -51,7 +51,7 @@
         <option value="0" selected disabled >Select Type</option>
         <option v-for="type in types" :value="type.id">{{type.name}}</option>
       </select>
-      <div v-if="form.type_id === 0 && submited" class="text-xs text-red-600">*Required</div>
+      <div v-if="form.type_id === 0 && submited && isNotValidate" class="text-xs text-red-600">*Required</div>
     </div>
     <div class="flex items-center justify-between">
       <button class="bg-[#9698D6] flex items-center hover:bg-white text-white hover:text-[#9698D6] hover:border-[#9698D6] py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -113,11 +113,18 @@ export default {
 
         if(!validateFrom){
           this.isNotValidate = true
-        }
-        const responsePost = await companyModel.postCompany(formData) as boolean|object|any
-        this.response = responsePost
+        }else{
+          const responsePost = await companyModel.postCompany(formData) as boolean|object|any
+          this.response = responsePost
 
-        this.isNotValidate = false
+          this.isNotValidate = false
+          this.form.name = null
+          this.form.tva = null
+          this.form.country_id = 0
+          this.form.type_id = 0
+          this.isNotValidate = false
+        }
+
 
       } catch (error) {
         console.log(error)
