@@ -1,11 +1,11 @@
 <template>
-  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/2 m-auto" @submit.prevent="postCompany">
+  <form   class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/2 m-auto" @submit.prevent="action === 'postCompany' ? postCompany() : updateCompany()" >
     <div class="mb-4">
-      <div v-if="submited && response.status === 201" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400">Company created successfully.</div>
-      <div v-if="response.status === 409  && submited " class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400">The VAT is already registered.</div>
-      <div v-if="response.status === 400  && submited && !isNotValidate" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400">The company has not been established</div>
-      <div v-if=" submited && isNotValidate" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400">TThe fields must be required.</div>
-
+      <div v-if="submited && responseStatus === 201" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400">Company created successfully.</div>
+      <div v-if="submited && responseStatus === 200" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"><strong>{{form.name}}</strong> updated successfully.</div>
+      <div v-if="responseStatus === 409  && submited " class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400">The VAT is already registered.</div>
+      <div v-if="responseStatus === 400  && submited && !isNotValidate" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400">The company has not been established</div>
+      <div v-if=" submited && isNotValidate" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400">The fields must be required.</div>
     </div>
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
@@ -54,8 +54,14 @@
       <div v-if="form.type_id === 0 && submited && isNotValidate" class="text-xs text-red-600">*Required</div>
     </div>
     <div class="flex items-center justify-between">
-      <button class="bg-[#9698D6] flex items-center hover:bg-white text-white hover:text-[#9698D6] hover:border-[#9698D6] py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-        <PlusIcon   class="size-5 mr-2 " /> Add
+      <button  class="bg-[#9698D6] flex items-center hover:bg-white text-white hover:text-[#9698D6] hover:border-[#9698D6] py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+        <span v-if="action === 'postCompany'"  class="w-20 flex justify-center">
+          <PlusIcon class="size-5 mr-2" /> Add
+        </span>
+        <span v-if="action === 'updateCompany'" class="w-20 flex justify-center">
+          <PencilIcon  class="size-5 mr-2" /> Update
+        </span>
+
       </button>
     </div>
   </form>
@@ -64,15 +70,16 @@
 import Country from '@/Models/CountryModels'
 import Types from '@/Models/TypesModels'
 import Company from  '@/Models/CompaniesModels'
-import {PlusIcon} from "@heroicons/vue/24/outline"
+import {PlusIcon , PencilIcon } from "@heroicons/vue/24/outline"
 
 export default {
-  components: {PlusIcon},
+  components: {PlusIcon , PencilIcon},
   data() {
     return {
+      action: 'postCompany',
       countries: [],
       types: [],
-      response: [],
+      responseStatus: [],
       submited: false,
       isNotValidate : false,
       form: {
@@ -86,17 +93,43 @@ export default {
   async mounted() {
     const countryModel = new Country()
     const typesModel = new Types()
+
+    const idCompany:number = parseInt(this.$route.params.id)
     try {
       const responseCountry = await countryModel.getCountry()
       this.countries = responseCountry.countries
 
       const responseTypes = await typesModel.getTypes()
       this.types = responseTypes.types
+      if(idCompany)
+        await this.actionForm(idCompany)
+      else
+        this.action = 'postCompany'
 
     } catch (error) {
       console.log(error)
     }
-  }, methods: {
+  },
+  methods: {
+    async actionForm(idCompany){
+      const id:number = parseInt(idCompany)
+
+      const companyModel = new Company()
+      try {
+        const response = await companyModel.getCompany(id)
+        if(response){
+
+          this.form.name = response.companies.name
+          this.form.tva = response.companies.tva
+          this.form.country_id = response.companies.country_id
+          this.form.type_id = response.companies.type_id
+
+          this.action = 'updateCompany'
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async postCompany() {
       this.submited = true
 
@@ -109,32 +142,55 @@ export default {
       const companyModel = new Company()
 
       try {
-        const validateFrom = this.validator(formData)
+        const validateForm = this.validator(formData)
 
-        if(!validateFrom){
+        if(!validateForm){
           this.isNotValidate = true
         }else{
           const responsePost = await companyModel.postCompany(formData) as boolean|object|any
-          this.response = responsePost
-
-          this.isNotValidate = false
-          this.form.name = null
-          this.form.tva = null
-          this.form.country_id = 0
-          this.form.type_id = 0
-          this.isNotValidate = false
+          this.responseStatus = responsePost.status
+          this.resetFrom()
         }
-
 
       } catch (error) {
         console.log(error)
       }
+    },
+    async updateCompany(){
+      this.submited = true
+      const idCompany:number = parseInt(this.$route.params.id)
+
+      const formData = {
+        name: this.form.name,
+        tva: this.form.tva,
+        country_id: this.form.country_id,
+        type_id: this.form.type_id
+      }
+      const companyModel = new Company()
+
+      try {
+
+        const responsePatch = await companyModel.patchCompany(idCompany, formData)
+        this.responseStatus = responsePatch.status
+      } catch (error) {
+        console.log(error)
+      }
+
 
     },
-    validator(data: object): boolean | object {
+    validator(data: any): boolean | object {
       if (data.name === null || data.tva === null || data.country_id === 0 || data.type_id === 0) return false
       return data
+    },
+    resetFrom(){
+      this.isNotValidate = false
+      this.form.name = null
+      this.form.tva = null
+      this.form.country_id = 0
+      this.form.type_id = 0
+      this.isNotValidate = false
     }
+
   }
 }
 </script>

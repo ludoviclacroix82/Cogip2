@@ -24,7 +24,6 @@ class Company{
     public getCompanies = async (limit: number , offset:number) =>{
 
         try {
-
             const response = await fetch(`${this.UrlApi}/companies/${limit}/${offset}`)
 
             if (!response.ok) throw new Error(`Response status: ${response.status}`)
@@ -36,20 +35,45 @@ class Company{
         }
     }
 
+    public getCompany  = async (id:number) =>{
+        try {
+            const response = await fetch(`${this.UrlApi}/companies/${id}`)
+
+            if (!response.ok) throw new Error(`Response status: ${response.status}`)
+
+            const json = await response.json()
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     public postCompany = async (data:object):Promise<boolean|object> =>{
 
         try {
-            const response = await fetch(`${this.UrlApi}/companies`, {
+            const response:object = await fetch(`${this.UrlApi}/companies`, {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                 }
             })
+            return response
+        }catch (error) {
+            console.log(error)
+        }
+    }
 
-            console.log(response)
-            //if(!response.ok) return false
+    public patchCompany = async (id:number,data:object):Promise<boolean|object> =>{
 
+        try {
+            const response:object = await fetch(`${this.UrlApi}/companies/${id}`, {
+                method: "PATCH",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
             return response
         }catch (error) {
             console.log(error)
