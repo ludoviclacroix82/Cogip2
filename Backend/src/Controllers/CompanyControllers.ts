@@ -47,7 +47,7 @@ const create = async (req: Request, res: Response):Promise<Response> => {
 
         const companyCreated = await Companies.postCompany(value,req,res)  
         
-        if(companyCreated === null) return res.status(409).json({ error: `La TVA est déjà enregistrée` })
+        if(companyCreated === null) return res.status(409).json({ error: `The VAT is already registered.` })
         
         console.log(`POST Company ${value.name}`)
         return res.status(201).json({ message: 'Company created successfully', data: companyCreated })

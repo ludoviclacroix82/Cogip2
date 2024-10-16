@@ -16,7 +16,8 @@ import CompaniesList from "@/components/Admin/Companies/companies.vue"
       <Header :link="'Admin/Companies'" :page="'Companies'" />
       <div class="w-7/8 flex flex-col">
         <div class="w-full right-10 flex justify-end mb-5 ">
-          <RouterLink class="w-40 py-2 font-semibold flex items-center  bg-transparent hover:bg-[#9698D6] text-gray-500 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded"  :to="{ name: 'companiesAdminIndex' }">
+          <RouterLink class="w-40 py-2 font-semibold flex items-center  bg-transparent hover:bg-[#9698D6] text-gray-500 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded"
+                      :to="{ name: 'companiesAdminAdd' }">
             <PlusIcon   class="size-5 mr-2 " /> Add
           </RouterLink>
         </div>

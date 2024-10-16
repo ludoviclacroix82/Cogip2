@@ -13,7 +13,7 @@ import Invoices from '@/components/Admin/Dashboard/invoices.vue'
         <SideBar />
     </div>
     <main class=" flex flex-col bg-[#F5F5FB] w-full min-h-screen h-full p-10">
-      <Header :link="'Dashboard'" />
+      <Header :link="'Dashboard'" :page="'Dashboard'" />
       <div class="w-7/8 grid grid-cols-2 gap-4 grid-flow-cols-dense">
         <Statistics />
         <Companies :limit="5"/>

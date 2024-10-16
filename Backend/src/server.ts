@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import route from './Routes/route'
 import db from './utils/db'
+import bodyParser from 'body-parser'
 const cors = require('cors')
 // Activer CORS pour toutes les origines
 
@@ -24,7 +25,7 @@ db.sync()
     console.error('Error connecting to the database:', error);
   })
 
-
+app.use(bodyParser.json())
 app.use(express.json())
 
 const openapiSpecification = swaggerJsdoc(options)
