@@ -28,7 +28,9 @@ import { EyeIcon , PencilIcon , TrashIcon } from '@heroicons/vue/24/outline'
           <td class="py-2 px-4 border-b border-gray-300">{{ company.tva}}</td>
           <td class="py-2 px-4 border-b border-gray-300">{{ company.created_at }}</td>
           <td class="py-2 px-4 border-b border-gray-300 flex ">
-            <EyeIcon   class="size-5 mr-2 hover:text-[#9698D6] cursor-pointer transition duration-150" />
+            <router-link :to="{ name: 'companiesAdminView', params: { id: company.id } }">
+             <EyeIcon   class="size-5 mr-2 hover:text-[#9698D6] cursor-pointer transition duration-150" />
+            </router-link>
             <router-link :to="{ name: 'companiesAdminUpdate', params: { id: company.id } }">
               <PencilIcon class="size-5 mr-2 hover:text-[#9698D6] cursor-pointer transition duration-150" />
             </router-link>

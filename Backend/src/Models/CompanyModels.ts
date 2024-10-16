@@ -46,7 +46,19 @@ class Company extends Model {
     */
     public static getCompany = async (id: number | undefined, req: Request, res: Response): Promise<any> => {
         try {
-            const company = await Company.findOne({ where: { id } })
+            const company = await Company.findOne({
+                where: { id },
+                include: [
+                    {
+                        model: Country,
+                        attributes: ['initials', 'name'],
+                    },
+                    {
+                        model: Type,
+                        attributes: ['name'],
+                    },
+                ],
+            });
             return company
 
         } catch (err) {
@@ -61,7 +73,7 @@ class Company extends Model {
      * @param res 
      * @returns Return company data or indicate that it exists if the company is found in the companies table
      */
-    public static postCompany = async (data:any,req: Request, res: Response): Promise<any> => {
+    public static postCompany = async (data:object,req: Request, res: Response): Promise<any> => {
         try {
 
             const companyTvaExist = await Company.findOne({
