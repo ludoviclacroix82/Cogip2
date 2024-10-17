@@ -79,5 +79,16 @@ class Company{
             console.log(error)
         }
     }
+
+    public deleteCompany = async (id:number):Promise<boolean|object> =>{
+        try {
+            const response:object = await fetch(`${this.UrlApi}/companies/${id}`, {
+                method: "DELETE",
+            })
+            return response
+        }catch (error) {
+            console.log(error)
+        }
+    }
 }
 export default Company

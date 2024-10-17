@@ -34,7 +34,9 @@ import { EyeIcon , PencilIcon , TrashIcon } from '@heroicons/vue/24/outline'
             <router-link :to="{ name: 'companiesAdminUpdate', params: { id: company.id } }">
               <PencilIcon class="size-5 mr-2 hover:text-[#9698D6] cursor-pointer transition duration-150" />
             </router-link>
-            <TrashIcon   class="size-5 mr-2 hover:text-red-600 cursor-pointer transition duration-150" />
+            <router-link :to="{ name: 'companiesAdminDelete', params: { id: company.id } }">
+              <TrashIcon   class="size-5 mr-2 hover:text-red-600 cursor-pointer transition duration-150" />
+            </router-link>
           </td>
         </tr>
         </tbody>
