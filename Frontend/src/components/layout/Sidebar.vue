@@ -28,5 +28,8 @@ import { UserIcon , HomeIcon , ClipboardIcon } from '@heroicons/vue/24/outline'
         <UserIcon  class="size-5 mr-2 " />Contacts
       </RouterLink>
     </div>
+    <div class="flex items-center py-4 fixed bottom-0 left-0 z-10 p-10 h-20 font-semibold">
+      <img :src="ImageProfil" class="w-1/5 object-cover rounded-full mr-5" alt=""> Logout
+    </div>
   </div>
 </template>
