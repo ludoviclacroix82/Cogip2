@@ -13,12 +13,12 @@ import CompaniesAdminView from '@/views/Admin/Companies/View.vue'
 import CompaniesAdminDelete from '@/views/Admin/Companies/Delete.vue'
 
 export const routes: { path: string; component: any; name?:string; meta?: any }[] = [
-    { path: '/', component: Home },
+    { path: '/', component: Home ,meta: { requiresAuth: false } },
     { path: '/invoices/', name: 'invoicesIndex',component: Invoices },
     { path: '/companies/', name: 'companiesIndex',component: Companies },
     { path: '/invoices/:ref', name: 'invoicesHome',component: Home },
     { path: '/companies/:id',  name: 'companiesHome',component: Home },
-    { path: '/dashboard/',  name: 'dashboardIndex',component: Dashboard },
+    { path: '/dashboard/',  name: 'dashboardIndex',component: Dashboard, },
     { path: '/admin/companies/' , name: 'companiesAdminIndex',component: CompaniesAdmin },
     { path: '/admin/companies/view/:id' , name: 'companiesAdminView',component: CompaniesAdminView },
     { path: '/admin/companies/add' , name: 'companiesAdminAdd',component: CompaniesAdminAdd },
