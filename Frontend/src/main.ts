@@ -8,13 +8,17 @@ import './assets/tailwind.css'
 
 import keycloakConfig from '../keycloak.json'
 
+
 const initKeycloak = async () => {
     const keycloak = new Keycloak(keycloakConfig)
 
     try {
-        console.log('Initialisation de Keycloak...');
-        const authenticated = await keycloak.init({ onLoad: 'login-required' });
-        console.log(`Keycloak initialisé, authentification: ${authenticated ? 'authentifié' : 'non authentifié'}`);
+        console.log('Initialisation de Keycloak...')
+        const authenticated = await keycloak.init({
+            onLoad: 'login-required',
+            enableLogging: true,
+        })
+        console.log(`Keycloak initialisé, authentification: ${authenticated ? 'authentifié' : 'non authentifié'}`)
 
         const app = createApp(App)
 
@@ -37,6 +41,7 @@ const initKeycloak = async () => {
         app.config.globalProperties.$keycloak = keycloak
 
         app.use(router).mount('#app')
+
 
     } catch (error) {
         console.error('Échec de l\'initialisation de Keycloak', error);
