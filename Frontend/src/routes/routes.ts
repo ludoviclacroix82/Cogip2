@@ -1,5 +1,6 @@
 // /routes/routes.ts
 import Home from '@/views/Home.vue'
+import Login from '@/views/Login.vue'
 import Invoices from '@/views/Invoices.vue'
 import Companies from '@/views/Companies.vue'
 
@@ -14,6 +15,7 @@ import CompaniesAdminDelete from '@/views/Admin/Companies/Delete.vue'
 
 export const routes: { path: string; component: any; name?:string; meta?: boolean }[] = [
     { path: '/', component: Home  },
+    { path: '/login',name: 'Login' , component: Login  },
     { path: '/invoices/', name: 'invoicesIndex',component: Invoices },
     { path: '/companies/', name: 'companiesIndex',component: Companies },
     { path: '/invoices/:ref', name: 'invoicesHome',component: Home },

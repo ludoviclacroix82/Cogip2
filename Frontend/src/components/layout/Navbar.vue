@@ -10,11 +10,25 @@
               <RouterLink class="p-2 hover:border border-gray-950" :to="{ name: 'dashboardIndex' }">Dashboard</RouterLink>
             </div>
             <div class="w-1/4 text-xl space-x-4 font-bold" >
-                <a class="px-4 py-2 bg-white rounded-md" href="">Sign up</a>
-                <a href="">Login</a>
+
+                <button @click="logout" class="px-4 py-2 bg-white rounded-md" >Logout</button>
+                <router-link :to="{name:'Login'}">
+                  Login
+                </router-link>
             </div>
         </div>  
 </nav>
 </template>
-<script setup>
+<script lang="ts">
+export default {
+  name: 'LogoutButton',
+  methods: {
+    logout() {
+      // Utilisation de la méthode logout de Keycloak
+      this.$keycloak.logout({
+        redirectUri: window.location.origin // Redirection après déconnexion
+      });
+    }
+  }
+}
 </script>
