@@ -4,10 +4,7 @@ import App from './App.vue'
 import { routes } from '@/routes/routes'
 import Keycloak from 'keycloak-js'
 
-import './assets/tailwind.css'
-
 import keycloakConfig from '../keycloak.json'
-
 
 const initKeycloak = async () => {
     const keycloak = new Keycloak(keycloakConfig)
