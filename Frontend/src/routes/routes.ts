@@ -12,8 +12,8 @@ import CompaniesAdminUpdate from '@/views/Admin/Companies/Update.vue'
 import CompaniesAdminView from '@/views/Admin/Companies/View.vue'
 import CompaniesAdminDelete from '@/views/Admin/Companies/Delete.vue'
 
-export const routes: { path: string; component: any; name?:string; meta?: any }[] = [
-    { path: '/', component: Home ,meta: { requiresAuth: false } },
+export const routes: { path: string; component: any; name?:string; meta?: boolean }[] = [
+    { path: '/', component: Home  },
     { path: '/invoices/', name: 'invoicesIndex',component: Invoices },
     { path: '/companies/', name: 'companiesIndex',component: Companies },
     { path: '/invoices/:ref', name: 'invoicesHome',component: Home },
