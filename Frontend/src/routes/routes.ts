@@ -24,7 +24,7 @@ export const routes: { path: string;component: any;name?: string;meta?: { requir
     { path: '/companies/', name: 'companiesIndex',component: Companies },
     { path: '/invoices/:ref', name: 'invoicesHome',component: Home },
     { path: '/companies/:id',  name: 'companiesHome',component: Home },
-    { path: '/dashboard/',  name: 'dashboardIndex',component: Dashboard,meta: { requiresAuth: true, roles: ['admin']} },
+    { path: '/dashboard/',  name: 'dashboardIndex',component: Dashboard,meta: { requiresAuth: true, roles: ['manage-account']} },
     { path: '/admin/companies/' , name: 'companiesAdminIndex',component: CompaniesAdmin },
     { path: '/admin/companies/view/:id' , name: 'companiesAdminView',component: CompaniesAdminView },
     { path: '/admin/companies/add' , name: 'companiesAdminAdd',component: CompaniesAdminAdd },

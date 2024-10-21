@@ -9,8 +9,8 @@ import { UserIcon , HomeIcon , ClipboardIcon } from '@heroicons/vue/24/outline'
     <div class="flex flex-col w-full items-center border-b border-[#E0E0E0] p-5">
       <img :src="ImageProfil" class="w-2/5 object-cover rounded-full" alt="">
       <div class=" flex flex-col justify-center">
-          <h3 class="text-md font-semibold text-center">User</h3>
-          <h3 class="text-md font-semibold text-center">Name</h3>
+          <h3 class="text-md font-semibold text-center">{{ keycloak.tokenParsed.given_name }}</h3>
+          <h3 class="text-md font-semibold text-center">{{ keycloak.tokenParsed.family_name }}</h3>
       </div>
     </div>
     <!-- Menu -->
@@ -37,6 +37,11 @@ import { UserIcon , HomeIcon , ClipboardIcon } from '@heroicons/vue/24/outline'
 <script>
 export default {
   name: 'LogoutButton',
+  data(){
+    return{
+      keycloak:this.$keycloak
+    }
+  },
   methods: {
     logout() {
       // Utilisation de la méthode logout de Keycloak
