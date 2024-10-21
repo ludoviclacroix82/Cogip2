@@ -52,7 +52,7 @@ app.use(keycloak.middleware())
 
 // Swagger configuration
 const openapiSpecification = swaggerJsdoc(options)
-app.use('/api-docs', keycloak.protect(), swaggerUi.serve, swaggerUi.setup(openapiSpecification))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
 
 // Protected routes
 app.use('/', keycloak.protect(), route)

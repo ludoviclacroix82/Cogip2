@@ -29,7 +29,21 @@ import { UserIcon , HomeIcon , ClipboardIcon } from '@heroicons/vue/24/outline'
       </RouterLink>
     </div>
     <div class="flex items-center py-4 fixed bottom-0 left-0 z-10 p-10 h-20 font-semibold">
-      <img :src="ImageProfil" class="w-1/5 object-cover rounded-full mr-5" alt=""> Logout
+      <img :src="ImageProfil" class="w-1/5 object-cover rounded-full mr-5" alt="">
+      <button @click="logout" class="px-4 py-2 bg-white rounded-md" >Logout</button>
     </div>
   </div>
 </template>
+<script>
+export default {
+  name: 'LogoutButton',
+  methods: {
+    logout() {
+      // Utilisation de la méthode logout de Keycloak
+      this.$keycloak.logout({
+        redirectUri: window.location.origin // Redirection après déconnexion
+      });
+    }
+  }
+}
+</script>

@@ -27,16 +27,17 @@ export default {
   data(){
     return {
       numberCompanies:0,
-      numberInvoices:0
+      numberInvoices:0,
+      token : this.$keycloak.token
     }
   },
   async mounted() {
     const companyModel = new Company()
     const invoicesModel = new Invoices()
     try {
-      const responseCompanies = await companyModel.getCompanies(1,0)
+      const responseCompanies = await companyModel.getCompanies(this.token,1,0)
       this.numberCompanies = responseCompanies.count
-      const responseInvoices = await invoicesModel.getInvoices(1,0)
+      const responseInvoices = await invoicesModel.getInvoices(this.token,1,0)
       this.numberInvoices = responseInvoices.count
     }catch(e){
       console.log(e)
