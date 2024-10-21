@@ -73,7 +73,7 @@ class Company extends Model {
      * @param res 
      * @returns Return company data or indicate that it exists if the company is found in the companies table
      */
-    public static postCompany = async (data:object,req: Request, res: Response): Promise<any> => {
+    public static postCompany = async (data:object|any,req: Request, res: Response): Promise<any> => {
         try {
 
             const companyTvaExist = await Company.findOne({
