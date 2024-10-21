@@ -31,12 +31,14 @@ export default {
   },data(){
     return {
       companies: [],
+      token : this.$keycloak.token
+
     }
   },
   async mounted() {
     const companiesModel = new Company()
     try {
-      const response = await companiesModel.getCompanies(this.limit,0)
+      const response = await companiesModel.getCompanies(this.token,this.limit,0)
       this.companies = response.companies
     }catch (error) {
       console.error(error)

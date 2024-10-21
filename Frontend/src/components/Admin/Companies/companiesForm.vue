@@ -82,6 +82,7 @@ export default {
       responseStatus: [],
       submited: false,
       isNotValidate : false,
+      token : this.$keycloak.token,
       form: {
         name: null,
         tva: null,
@@ -96,10 +97,10 @@ export default {
 
     const idCompany:number = parseInt(this.$route.params.id)
     try {
-      const responseCountry = await countryModel.getCountry()
+      const responseCountry = await countryModel.getCountry(this.token)
       this.countries = responseCountry.countries
 
-      const responseTypes = await typesModel.getTypes()
+      const responseTypes = await typesModel.getTypes(this.token)
       this.types = responseTypes.types
       if(idCompany)
         await this.actionForm(idCompany)
@@ -116,7 +117,7 @@ export default {
 
       const companyModel = new Company()
       try {
-        const response = await companyModel.getCompany(id)
+        const response = await companyModel.getCompany(this.token,id)
         if(response){
 
           this.form.name = response.companies.name
@@ -147,7 +148,7 @@ export default {
         if(!validateForm){
           this.isNotValidate = true
         }else{
-          const responsePost = await companyModel.postCompany(formData) as boolean|object|any
+          const responsePost = await companyModel.postCompany(this.token,formData) as boolean|object|any
           this.responseStatus = responsePost.status
           this.resetFrom()
         }
@@ -170,7 +171,7 @@ export default {
 
       try {
 
-        const responsePatch = await companyModel.patchCompany(idCompany, formData)
+        const responsePatch = await companyModel.patchCompany(this.token,idCompany, formData)
         this.responseStatus = responsePatch.status
       } catch (error) {
         console.log(error)

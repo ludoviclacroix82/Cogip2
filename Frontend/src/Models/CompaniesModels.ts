@@ -21,10 +21,15 @@ class Company{
         this.update_at = update_at
     }
 
-    public getCompanies = async (limit: number , offset:number) =>{
+    public getCompanies = async (token:string,limit: number , offset:number) =>{
 
         try {
-            const response = await fetch(`${this.UrlApi}/companies/${limit}/${offset}`)
+            const response = await fetch(`${this.UrlApi}/companies/${limit}/${offset}`,{
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
 
             if (!response.ok) throw new Error(`Response status: ${response.status}`)
 
@@ -35,9 +40,14 @@ class Company{
         }
     }
 
-    public getCompany  = async (id:number) =>{
+    public getCompany  = async (token:string, id:number) =>{
         try {
-            const response = await fetch(`${this.UrlApi}/companies/${id}`)
+            const response = await fetch(`${this.UrlApi}/companies/${id}`,{
+                method:'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
 
             if (!response.ok) throw new Error(`Response status: ${response.status}`)
 
@@ -48,14 +58,15 @@ class Company{
         }
     }
 
-    public postCompany = async (data:object):Promise<boolean|object> =>{
+    public postCompany = async (token:strind,data:object):Promise<boolean|object> =>{
 
         try {
             const response:object = await fetch(`${this.UrlApi}/companies`, {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
-                    "Content-type": "application/json; charset=UTF-8"
+                    "Content-type": "application/json; charset=UTF-8",
+                    'Authorization': 'Bearer ' + token
                 }
             })
             return response
@@ -64,14 +75,15 @@ class Company{
         }
     }
 
-    public patchCompany = async (id:number,data:object):Promise<boolean|object> =>{
+    public patchCompany = async (token:string,id:number,data:object):Promise<boolean|object> =>{
 
         try {
             const response:object = await fetch(`${this.UrlApi}/companies/${id}`, {
                 method: "PATCH",
                 body: JSON.stringify(data),
                 headers: {
-                    "Content-type": "application/json; charset=UTF-8"
+                    "Content-type": "application/json; charset=UTF-8",
+                    'Authorization': 'Bearer ' + token
                 }
             })
             return response
@@ -80,10 +92,13 @@ class Company{
         }
     }
 
-    public deleteCompany = async (id:number):Promise<boolean|object> =>{
+    public deleteCompany = async (token:string,id:number):Promise<boolean|object> =>{
         try {
             const response:object = await fetch(`${this.UrlApi}/companies/${id}`, {
                 method: "DELETE",
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
             })
             return response
         }catch (error) {

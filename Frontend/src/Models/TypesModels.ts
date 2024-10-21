@@ -11,11 +11,16 @@ class Type {
         this.name = name
     }
 
-    public getTypes =  async () =>{
+    public getTypes =  async (token:string) =>{
 
         try {
             const Url = import.meta.env.VITE_URL_API
-            const response = await fetch(`${Url}/types`)
+            const response = await fetch(`${Url}/types`,{
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`)
             }

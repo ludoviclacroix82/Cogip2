@@ -32,21 +32,21 @@
       type: Number,
       required: true,
     },
+      limit: {
+        type: Number,
+        required: true,
+      },
   },
   methods: {
     nextPage() {
       if (this.page < this.pages) {
         this.offset = (this.page - 1) * this.limit
-        console.log(this.offset)
-        console.log(this.page)        
         this.$emit('updatePage', this.page + 1)
       }
     },
     prevPage() {
       if (this.page > 1) {
         this.offset = (this.page - 1) * this.limit
-        console.log(this.offset)
-        console.log(this.page)
         this.$emit('updatePage', this.page - 1)
       }
     },

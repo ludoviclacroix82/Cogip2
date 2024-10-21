@@ -14,12 +14,17 @@ class Country{
         this.initials = initials
     }
 
-    public  getCountry =  async () =>{
+    public  getCountry =  async (token:string) =>{
 
         try {
 
             const Url = import.meta.env.VITE_URL_API
-            const response = await fetch(`${Url}/countries`)
+            const response = await fetch(`${Url}/countries`,{
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
 
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`)

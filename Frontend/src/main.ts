@@ -37,9 +37,9 @@ const initKeycloak = async () => {
 
         // Ajoutez Keycloak aux propriétés globales
         app.config.globalProperties.$keycloak = keycloak
-
         app.use(router).mount('#app')
 
+        sessionStorage.setItem("token", keycloak.token);
 
     } catch (error) {
         console.error('Échec de l\'initialisation de Keycloak', error);

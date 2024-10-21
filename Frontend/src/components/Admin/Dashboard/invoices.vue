@@ -32,12 +32,14 @@ export default {
   data(){
     return {
       invoices:[],
+      token : this.$keycloak.token
+
     }
   },
   async mounted() {
     const invoicesModels = new Invoices()
     try {
-      const response = await invoicesModels.getInvoices(this.limit,0)
+      const response = await invoicesModels.getInvoices(this.token,this.limit,0)
       this.invoices = response.invoices
     }catch (error) {
       console.error( error)

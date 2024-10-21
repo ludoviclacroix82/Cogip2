@@ -32,6 +32,7 @@ export default {
       country:'',
       type: '',
       company: [],
+      token : this.$keycloak.token
     }
   },
   async mounted() {
@@ -40,7 +41,7 @@ export default {
     const idCompany:number = parseInt(this.$route.params.id)
     try {
 
-      const responseCompany = await companyModel.getCompany(idCompany)
+      const responseCompany = await companyModel.getCompany(this.token,idCompany)
       this.company = responseCompany.companies
       this.country = responseCompany.companies.Country.name
       this.type = responseCompany.companies.Type.name

@@ -70,24 +70,17 @@ export default {
       records: 0,
       pages: 0,
       offset: 0,
+      token : this.$keycloak.token
     }
   },
   async created() {
-    const companyModel = new Company()
-    try {
-      const response = await companyModel.getCompanies(this.limit,this.offset)
-      this.companies = response.companies
-      this.records = response.count
-      this.pages = Math.ceil(this.records / this.limit)
-    } catch (error) {
-      console.error(error)
-    }
+    await this.fetchUpdate(this.limit,this.offset)
   },
   methods: {
-    async fetchUpdate() {
+    async fetchUpdate(limit,offset) {
       const companyModel = new Company()
       try {
-        const response = await companyModel.getCompanies(this.limit,this.offset)
+        const response = await companyModel.getCompanies(this.token,limit,offset)
         this.companies = response.companies
         this.records = response.count
         this.pages = Math.ceil(this.records / this.limit)
@@ -95,10 +88,10 @@ export default {
         console.error(error)
       }
     },
-    updatePage(newPage) {
+    async updatePage(newPage) {
       this.page = newPage;
       this.offset = (this.page - 1) * this.limit;
-      this.fetchUpdate();
+      await this.fetchUpdate(this.limit,this.offset);
     },
   },
 }

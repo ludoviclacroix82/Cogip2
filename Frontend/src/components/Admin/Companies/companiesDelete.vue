@@ -32,6 +32,7 @@ export default {
       name:'',
       response:false,
       submited:false,
+      token: this.$keycloak.token,
     }
   },
   async mounted(){
@@ -39,7 +40,7 @@ export default {
     const id:number = parseInt(this.$route.params.id)
 
     try {
-      const response:object|any =await  companiesModels.getCompany(id)
+      const response:object|any =await  companiesModels.getCompany(this.token,id)
         this.name=response.companies.name
         this.response = response
 
@@ -53,7 +54,7 @@ export default {
       const companiesModels = new Company()
       const id:number = parseInt(this.$route.params.id)
       try {
-        const response:object|any =await  companiesModels.deleteCompany(id) as object|any
+        const response:object|any =await  companiesModels.deleteCompany(this.token,id) as object|any
         this.response= response
         this.submited = true
       }catch(error){

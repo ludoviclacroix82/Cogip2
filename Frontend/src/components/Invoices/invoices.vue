@@ -56,35 +56,30 @@
       records: 0,
       pages: 0,
       offset : 0,
+      token : this.$keycloak.token
     }
   },
   async created() {
-    const invoiceModel = new Invoice()
-    try {
-      const response = await invoiceModel.getInvoices(this.limit, this.offset)
-      this.invoices = response.invoices   
-      this.records = response.count
-      this.pages = Math.ceil(this.records / this.limit)
-    } catch (error) {
-      console.error( error)
-    }
+    await this.fetchUpdate(this.limit,this.offset)
   },
   methods: {
-    async fetchUpdate() {
+    async fetchUpdate(limit,offset) {
       const invoiceModel = new Invoice()
       try {
-        const response = await invoiceModel.getInvoices(this.limit, this.offset)
+        const response = await invoiceModel.getInvoices(this.token,limit, offset)
         this.invoices = response.invoices
         this.records = response.count
         this.pages = Math.ceil(this.records / this.limit)
+        console.log(`this.offset = ${this.offset}` )
       } catch (error) {
         console.error( error)
       }
     },
-    updatePage(newPage) {
+    async updatePage(newPage) {
       this.page = newPage;
-      this.offset = (this.page - 1) * this.limit;    
-      this.fetchUpdate();
+      this.offset = (this.page - 1) * this.limit
+      console.log(`Page: ${this.page},limit: ${this.limit},offset: ${this.offset}`)
+      await this.fetchUpdate(this.limit,this.offset)
     },
   },
 }

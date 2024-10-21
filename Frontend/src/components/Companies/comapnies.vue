@@ -34,7 +34,7 @@
   
   <script>
   import Company from '@/Models/CompaniesModels'
-  import Paginate from "@/components/Paginate/paginate.vue";
+  import Paginate from "@/components/Paginate/paginate.vue"
   
   export default {
     components: {
@@ -50,31 +50,24 @@
         required: true,
       },
     },
-    data() {
+      data() {
       return {
         companies: [],
         page: 1,
         records: 0,
         pages: 0,
         offset: 0,
+        token : this.$keycloak.token
       }
     },
     async created() {
-      const companyModel = new Company()
-      try {
-        const response = await companyModel.getCompanies(this.limit,this.offset)
-        this.companies = response.companies
-        this.records = response.count
-        this.pages = Math.ceil(this.records / this.limit)
-      } catch (error) {
-        console.error(error)
-      }
+      await this.fetchUpdate(this.limit,this.offset)
     },
     methods: {
-      async fetchUpdate() {
+      async fetchUpdate(limit,offset) {
         const companyModel = new Company()
         try {
-          const response = await companyModel.getCompanies(this.limit,this.offset)
+          const response = await companyModel.getCompanies(this.token,limit,offset)
           this.companies = response.companies
           this.records = response.count
           this.pages = Math.ceil(this.records / this.limit)
@@ -82,10 +75,10 @@
           console.error(error)
         }
       },
-      updatePage(newPage) {
-        this.page = newPage;
-        this.offset = (this.page - 1) * this.limit;
-        this.fetchUpdate();
+      async updatePage(newPage) {
+        this.page = newPage
+        this.offset = (this.page - 1) * this.limit
+        await this.fetchUpdate(this.limit,this.offset)
       },
     },
   }
