@@ -1,0 +1,10 @@
+{
+  "realm": "Cogip",
+  "auth-server-url": "http://localhost:8080/",
+  "ssl-required": "external",
+  "resource": "ApiCogip",
+  "public-client": true,
+  "confidential-port": 0,
+  "clientId": "ApiCogip",
+  "bearerOnly": true
+}
