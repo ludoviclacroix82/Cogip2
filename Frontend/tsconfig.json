@@ -4,14 +4,16 @@
     "declaration": true
   },
   "include": [
-    "src/**/*",
+    "src/**/*.ts",
+    "src/**/*.vue"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ],
   "references": [
     {
       "path": "./tsconfig.node.json"
     },
-    {
-      "path": "./tsconfig.app.json"
-    }
   ]
 }

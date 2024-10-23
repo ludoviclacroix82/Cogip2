@@ -1,7 +1,8 @@
+// main.ts
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
-import { routes } from '@/routes/routes'
+import { routes } from './routes/routes'
 import Keycloak from 'keycloak-js'
 import './assets/tailwind.css'
 
@@ -24,24 +25,37 @@ const initKeycloak = async () => {
             history: createWebHistory(),
             routes
         })
-
-        // Ajoutez une garde de navigation pour vérifier l'authentification
+        console.log(keycloak.tokenParsed.resource_access.account.roles)
+        // Ajoutez une garde de navigation pour vérifier l'authentification et les rôles
         router.beforeEach((to, from, next) => {
-            if (to.meta.requiresAuth && !keycloak.authenticated) {
-                console.log('Utilisateur non authentifié, redirection vers la page de connexion...');
-                keycloak.login({ redirectUri: window.location.origin + to.fullPath });
+            if (to.meta.requiresAuth) {
+                if (!keycloak.authenticated) {
+                    keycloak.login({ redirectUri: window.location.origin + to.fullPath })
+                } else if (to.meta.roles && to.meta.roles.length > 0) {
+                    const hasRequiredRole =to.meta.roles.some(role => keycloak.tokenParsed.aud.includes(role))
+
+                    console.log(`hasRequiredRole: ${hasRequiredRole} | roles  : ${keycloak.tokenParsed.aud} | meta : ${to.meta.roles}`)
+                    if (!hasRequiredRole) {
+                        next('/')
+                    } else {
+                        next()
+                    }
+                } else {
+                    next()
+                }
             } else {
-                next();
+                next()
             }
         })
 
         // Ajoutez Keycloak aux propriétés globales
         app.config.globalProperties.$keycloak = keycloak
         app.use(router).mount('#app')
+        console.log(keycloak)
 
     } catch (error) {
         console.error('Échec de l\'initialisation de Keycloak', error);
     }
 }
 
-initKeycloak()
+await initKeycloak()

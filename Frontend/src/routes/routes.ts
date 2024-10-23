@@ -17,17 +17,25 @@ import CompaniesAdminUpdate from '@/views/Admin/Companies/Update.vue'
 import CompaniesAdminView from '@/views/Admin/Companies/View.vue'
 import CompaniesAdminDelete from '@/views/Admin/Companies/Delete.vue'
 
-export const routes: { path: string;component: any;name?: string;meta?: { requiresAuth?: boolean; roles?: string[] };}[] = [
-    { path: '/', component: Home  },
-    { path: '/login',name: 'Login' , component: Login  },
-    { path: '/invoices/', name: 'invoicesIndex',component: Invoices },
-    { path: '/companies/', name: 'companiesIndex',component: Companies },
-    { path: '/invoices/:ref', name: 'invoicesHome',component: Home },
-    { path: '/companies/:id',  name: 'companiesHome',component: Home },
-    { path: '/dashboard/',  name: 'dashboardIndex',component: Dashboard,meta: { requiresAuth: true, roles: ['manage-account']} },
-    { path: '/admin/companies/' , name: 'companiesAdminIndex',component: CompaniesAdmin },
-    { path: '/admin/companies/view/:id' , name: 'companiesAdminView',component: CompaniesAdminView },
-    { path: '/admin/companies/add' , name: 'companiesAdminAdd',component: CompaniesAdminAdd },
-    { path: '/admin/companies/update/:id' , name: 'companiesAdminUpdate',component: CompaniesAdminUpdate },
-    { path: '/admin/companies/delete/:id' , name: 'companiesAdminDelete',component: CompaniesAdminDelete },
+export const routes: {
+    path: string;
+    component: any;
+    name?: string;
+    meta?: {
+        requiresAuth?: boolean;
+        roles?: string[];
+    };
+}[] = [
+    { path: '/', component: Home },
+    { path: '/login', name: 'Login', component: Login },
+    { path: '/invoices/', name: 'invoicesIndex', component: Invoices, meta: { requiresAuth: true } },
+    { path: '/companies/', name: 'companiesIndex', component: Companies, meta: { requiresAuth: true } },
+    { path: '/invoices/:ref', name: 'invoicesHome', component: Home, meta: { requiresAuth: true } },
+    { path: '/companies/:id', name: 'companiesHome', component: Home, meta: { requiresAuth: true } },
+    { path: '/admin/dashboard/', name: 'dashboardIndex', component: Dashboard, meta: { requiresAuth: true, roles: ['realm-management'] } },
+    { path: '/admin/companies/', name: 'companiesAdminIndex', component: CompaniesAdmin, meta: { requiresAuth: true, roles: ['realm-management'] } },
+    { path: '/admin/companies/view/:id', name: 'companiesAdminView', component: CompaniesAdminView, meta: { requiresAuth: true, roles: ['realm-management'] } },
+    { path: '/admin/companies/add', name: 'companiesAdminAdd', component: CompaniesAdminAdd, meta: { requiresAuth: true, roles: ['realm-management'] } },
+    { path: '/admin/companies/update/:id', name: 'companiesAdminUpdate', component: CompaniesAdminUpdate, meta: { requiresAuth: true, roles: ['realm-management'] } },
+    { path: '/admin/companies/delete/:id', name: 'companiesAdminDelete', component: CompaniesAdminDelete, meta: { requiresAuth: true, roles: ['realm-management'] } },
 ]
