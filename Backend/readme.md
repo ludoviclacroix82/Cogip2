@@ -1,4 +1,4 @@
-# Cogip Billing API
+# Cogip  API (Backend)
 
 ## Description
 This project is a billing API that allows you to create, read, update, and delete invoices.
