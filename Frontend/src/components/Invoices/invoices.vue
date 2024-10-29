@@ -83,7 +83,8 @@
 
         if(this.searchRef){
           this.invoices = this.invoices.filter(invoice => invoice.ref.includes(this.searchRef) )
-          this.records = Object.keys(this.invoices).length
+          //this.records = Object.keys(this.invoices).length
+          console.log(this.records)
         }
 
         this.pages = Math.ceil(this.records / this.limit)

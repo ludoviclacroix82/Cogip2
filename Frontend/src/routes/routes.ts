@@ -5,8 +5,8 @@ const keycloak = new Keycloak(keycloakConfig)
 
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
-import Invoices from '@/views/Invoices.vue'
-import Companies from '@/views/Companies.vue'
+import Invoices from '@/views/Invoices/Invoices.vue'
+import Companies from '@/views/Companies/Companies.vue'
 
 import Dashboard from '@/views/Admin/Dashboard.vue'
 
