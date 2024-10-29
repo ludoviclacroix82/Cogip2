@@ -20,7 +20,7 @@ import HeaderImgFont from '@/images/Rectangle_10.png'
         </h2>
         <hr class="w-[200px] h-[20px] bg-[#F9DE4E] relative bottom-4 left-20 z-0" />
       </div>
-      <InvoicesList :limit="15" :paginateView="true"/>
+      <InvoicesList :limit="5" :paginateView="true"/>
     </div>    
   </main>
 </template>

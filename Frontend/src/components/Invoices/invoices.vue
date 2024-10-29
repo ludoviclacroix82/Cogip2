@@ -1,7 +1,17 @@
 <template>
     <div class="w-3/4 flex flex-col">
       <div class="w-full py-10">
-        <Paginate v-if="paginateView === true" :page="page" :pages="pages" @updatePage="updatePage" />
+        <div class="w-full py-2 flex justify-between items-center">
+          <input
+              class="py-1 px-2 border border-gray-400 rounded text-s h-8"
+              name="searchRef"
+              id="searchRef"
+              placeholder="Search Ref"
+              v-model="searchRef"
+              @input="onSearchInput"
+          />
+          <Paginate v-if="paginateView === true" :page="page" :pages="pages" @updatePage="updatePage" />
+        </div>
         <table class="min-w-full">
           <thead>
             <tr class="bg-[#F9DE4E] text-black font-semibold text-left">
@@ -56,7 +66,8 @@
       records: 0,
       pages: 0,
       offset : 0,
-      token : this.$keycloak.token
+      token : this.$keycloak.token,
+      searchRef : '',
     }
   },
   async created() {
@@ -69,6 +80,12 @@
         const response = await invoiceModel.getInvoices(this.token,limit, offset)
         this.invoices = response.invoices
         this.records = response.count
+
+        if(this.searchRef){
+          this.invoices = this.invoices.filter(invoice => invoice.ref.includes(this.searchRef) )
+          this.records = Object.keys(this.invoices).length
+        }
+
         this.pages = Math.ceil(this.records / this.limit)
         console.log(`this.offset = ${this.offset}` )
       } catch (error) {
@@ -81,6 +98,9 @@
       console.log(`Page: ${this.page},limit: ${this.limit},offset: ${this.offset}`)
       await this.fetchUpdate(this.limit,this.offset)
     },
+    async onSearchInput(){
+      await this.fetchUpdate(this.limit,this.offset)
+    }
   },
 }
   </script>

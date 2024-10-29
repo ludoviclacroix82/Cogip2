@@ -1,7 +1,17 @@
 <template>
     <div class="w-3/4 flex flex-col">
       <div class="w-full py-10">
-        <Paginate v-if="paginateView === true" :page="page" :pages="pages" @updatePage="updatePage" />
+        <div class="w-full py-2 flex justify-between items-center">
+          <input
+              class="py-1 px-2 border border-gray-400 rounded text-s h-8"
+              name="searchName"
+              id="searchName"
+              placeholder="Search Name"
+              v-model="searchName"
+              @input="onSearchInput"
+          />
+          <Paginate v-if="paginateView === true" :page="page" :pages="pages" @updatePage="updatePage" />
+        </div>
         <table class="min-w-full">
           <thead>
             <tr class="bg-[#F9DE4E] text-black font-semibold text-left">
@@ -57,7 +67,8 @@
         records: 0,
         pages: 0,
         offset: 0,
-        token : this.$keycloak.token
+        token : this.$keycloak.token,
+        searchName:'',
       }
     },
     async created() {
@@ -69,6 +80,10 @@
         try {
           const response = await companyModel.getCompanies(this.token,limit,offset)
           this.companies = response.companies
+
+          if(this.searchName)
+            this.companies = this.companies.filter(company => company.name.includes(this.searchName))
+
           this.records = response.count
           this.pages = Math.ceil(this.records / this.limit)
         } catch (error) {
@@ -80,6 +95,9 @@
         this.offset = (this.page - 1) * this.limit
         await this.fetchUpdate(this.limit,this.offset)
       },
+      async onSearchInput(){
+            await this.fetchUpdate(this.limit,this.offset)
+      }
     },
   }
   </script>
