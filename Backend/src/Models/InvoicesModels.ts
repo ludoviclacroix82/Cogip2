@@ -41,6 +41,18 @@ class Invoice extends Model {
         }
     }
 
+    public getInvoicesFromCompany = async (company_id:number,req: Request, res: Response) => {
+
+        try {
+            const invoices = await Invoice.findAndCountAll({
+                where : {company_id}
+            })
+            return invoices
+        }catch (error) {
+            console.error(error)
+        }
+    }
+
     public postInvoice = async (data: object, req: Request, res: Response) => {
 
         try {

@@ -26,6 +26,19 @@ const viewAll = async (req: Request, res: Response) => {
     }
 }
 
+const viewFormCompany = async (req: Request, res: Response) => {
+
+    try {
+        const id:number = parseInt(req.params.company_id)
+        const {count ,rows} = await new Invoices().getInvoicesFromCompany(id, req, res) as object|any
+
+        console.log(`GET Invoices Company# ${id}`)
+        return res.status(200).json({ invoices: rows , count: count})
+
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal Server Error' })
+    }
+}
 const view = async (req: Request, res: Response) => {
 
     try {
@@ -100,4 +113,4 @@ const deleteInvoice  = async (req:Request ,res:Response) =>{
     }
 }
 
-export {viewAll , view ,create , update , deleteInvoice}
+export {viewAll , view ,create , update , deleteInvoice , viewFormCompany}

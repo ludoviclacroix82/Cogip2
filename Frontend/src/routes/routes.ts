@@ -5,8 +5,9 @@ const keycloak = new Keycloak(keycloakConfig)
 
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
-import Invoices from '@/views/Invoices.vue'
-import Companies from '@/views/Companies.vue'
+import Invoices from '@/views/Invoices/Invoices.vue'
+import Companies from '@/views/Companies/Companies.vue'
+import CompaniesView from '@/views/Companies/View.vue'
 
 import Dashboard from '@/views/Admin/Dashboard.vue'
 
@@ -31,7 +32,7 @@ export const routes: {
     { path: '/invoices/', name: 'invoicesIndex', component: Invoices, meta: { requiresAuth: true } },
     { path: '/companies/', name: 'companiesIndex', component: Companies, meta: { requiresAuth: true } },
     { path: '/invoices/:ref', name: 'invoicesHome', component: Home, meta: { requiresAuth: true } },
-    { path: '/companies/:id', name: 'companiesHome', component: Home, meta: { requiresAuth: true } },
+    { path: '/companies/:id', name: 'companiesView', component: CompaniesView, meta: { requiresAuth: true } },
     { path: '/admin/dashboard/', name: 'dashboardIndex', component: Dashboard, meta: { requiresAuth: true, roles: ['realm-management'] } },
     { path: '/admin/companies/', name: 'companiesAdminIndex', component: CompaniesAdmin, meta: { requiresAuth: true, roles: ['realm-management'] } },
     { path: '/admin/companies/view/:id', name: 'companiesAdminView', component: CompaniesAdminView, meta: { requiresAuth: true, roles: ['realm-management'] } },

@@ -1,4 +1,4 @@
-<!-- /src/view/Companies -->
+<!-- /src/view/Comapnies/Companies -->
 <script setup lang="ts">
 /**  components */
 import CompaniesList from "@/components/Companies/comapnies.vue"
@@ -21,7 +21,7 @@ import HeaderImgFont from '@/images/Rectangle_10.png'
         </h2>
         <hr class="w-[200px] h-[20px] bg-[#F9DE4E] relative bottom-4 left-20 z-0" />
       </div>
-      <CompaniesList :limit="15" :paginateView="true"/>
+      <CompaniesList :limit="15" :paginateView="true" :searchView="true"/>
     </div>
   </main>
 </template>

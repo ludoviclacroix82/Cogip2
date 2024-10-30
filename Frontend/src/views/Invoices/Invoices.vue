@@ -1,4 +1,4 @@
-<!-- /src/view/Home -->
+<!-- /src/view/Invoices/Invoices -->
 <script setup lang="ts">
 /**  components */
 import NavBar from '@/components/layout/Navbar.vue'
@@ -20,7 +20,7 @@ import HeaderImgFont from '@/images/Rectangle_10.png'
         </h2>
         <hr class="w-[200px] h-[20px] bg-[#F9DE4E] relative bottom-4 left-20 z-0" />
       </div>
-      <InvoicesList :limit="15" :paginateView="true"/>
+      <InvoicesList :limit="15"  :paginateView="true" :searchView="true"/>
     </div>    
   </main>
 </template>

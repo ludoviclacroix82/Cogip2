@@ -56,6 +56,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
 
 // Protected routes
 app.use('/', keycloak.protect(), route)
+app.use('/api-docs', keycloak.protect(), route)
 
 // Error handling middleware
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {

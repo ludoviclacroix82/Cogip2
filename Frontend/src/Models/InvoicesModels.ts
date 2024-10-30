@@ -41,6 +41,27 @@ class Invoice {
             console.log(error)
         }
     }
+
+    public getInvoicesFromCompany = async (token:string, id:number) =>{
+        try {
+            const response = await fetch(`${this.UrlApi}/invoice/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`)
+            }
+            const json = await response.json()
+            console.log(json)
+            return json
+
+        }catch (error) {
+            console.log(error)
+        }
+    }
     public  refreshToken = async (keycloak) => {
         if (keycloak.isTokenExpired()) {
             try {
