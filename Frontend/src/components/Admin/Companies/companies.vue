@@ -4,7 +4,18 @@ import { EyeIcon , PencilIcon , TrashIcon } from '@heroicons/vue/24/outline'
 <template>
   <div class="w-full flex flex-col">
     <div class="w-full py-10">
+     <div class="w-full py-2 flex justify-between items-center">
+      <input
+          v-if="searchView === true"
+          class="py-1 px-2 border border-gray-400 rounded text-s h-8"
+          name="searchName"
+          id="searchName"
+          placeholder="Search Name"
+          v-model="searchName"
+          @input="onSearchInput"
+      />
       <Paginate v-if="paginateView === true" :page="page" :pages="pages" @updatePage="updatePage" />
+    </div>
       <table class="min-w-full">
         <thead>
         <tr class="bg-[#9698D6] text-white font-semibold text-left">
@@ -21,7 +32,7 @@ import { EyeIcon , PencilIcon , TrashIcon } from '@heroicons/vue/24/outline'
         <tr v-for="company in companies" :key="company.id" class="hover:bg-gray-100">
           <td class="py-2 px-4 border-b border-gray-300">{{ company.id}}</td>
           <td class="py-2 px-4 border-b border-gray-300">
-            <RouterLink :to="{ name: 'companiesHome', params: { id: company.id } }">{{ company.name }}</RouterLink>
+            <RouterLink :to="{ name: 'companiesAdminView', params: { id: company.id } }">{{ company.name }}</RouterLink>
           </td>
           <td class="py-2 px-4 border-b border-gray-300">{{ company.Type.name }}</td>
           <td class="py-2 px-4 border-b border-gray-300" :title="company.Country.name">{{ company.Country.initials }}</td>
@@ -62,6 +73,11 @@ export default {
       type: Boolean,
       required: true,
     },
+    searchView :{
+      type: Boolean,
+      required: false,
+      default: false,
+    }
   },
   data() {
     return {
@@ -82,6 +98,10 @@ export default {
       try {
         const response = await companyModel.getCompanies(this.token,limit,offset)
         this.companies = response.companies
+
+        if(this.searchName)
+          this.companies = this.companies.filter(company => company.name.includes(this.searchName))
+
         this.records = response.count
         this.pages = Math.ceil(this.records / this.limit)
       } catch (error) {
@@ -93,6 +113,9 @@ export default {
       this.offset = (this.page - 1) * this.limit;
       await this.fetchUpdate(this.limit,this.offset);
     },
+    async onSearchInput(){
+      await this.fetchUpdate(this.limit,this.offset)
+    }
   },
 }
 </script>

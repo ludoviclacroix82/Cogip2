@@ -21,7 +21,7 @@ import CompaniesList from "@/components/Admin/Companies/companies.vue"
             <PlusIcon   class="size-5 mr-2 " /> Add
           </RouterLink>
         </div>
-        <CompaniesList :limit="15" :paginateView="true"/>
+        <CompaniesList :limit="15" :paginateView="true" :searchView="true"/>
       </div>
     </main>
   </div>
