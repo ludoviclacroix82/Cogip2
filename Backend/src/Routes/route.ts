@@ -394,6 +394,25 @@ router.patch('/invoices/:ref',InvoicesControllers.update)
  */
 router.delete('/invoices/:ref',InvoicesControllers.deleteInvoice)
 
+/**
+ * @openapi
+ * /invoice/:
+ *  get:
+ *      tags:
+ *          - Invoices
+ *      description: Invoices from comapny Id
+ *      parameters:
+ *          - name : id
+ *            in: path
+ *            description: Id company
+ *            schema:
+ *              type: integer
+ *      responses:
+ *       200:
+ *         description: Sucess *
+ * */
+router.get('/invoice/:company_id', InvoicesControllers.viewFormCompany)
+
 /** Types */
 /**
  * @openapi
