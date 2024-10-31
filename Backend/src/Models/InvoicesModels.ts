@@ -2,6 +2,7 @@ import { DataTypes, Model } from 'sequelize'
 import { Request, Response } from 'express'
 import sequelize from '../utils/db'
 import Company from './CompanyModels'
+import Country from "./CountryModels";
 
 const { generatorRef } = require('../utils/utils')
 
@@ -45,7 +46,11 @@ class Invoice extends Model {
 
         try {
             const invoices = await Invoice.findAndCountAll({
-                where : {company_id}
+                where : {company_id},
+                include: [{
+                    model: Company,
+                    attributes: ['name'],
+                }],
             })
             return invoices
         }catch (error) {

@@ -110,6 +110,7 @@ export default {
           response = await invoiceModel.getInvoices(this.token, limit, offset)
         }
 
+        4
         this.invoices = response.invoices
         this.records = response.count
 
