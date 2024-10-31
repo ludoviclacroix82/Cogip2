@@ -27,7 +27,7 @@ export const routes: {
         roles?: string[];
     };
 }[] = [
-    { path: '/', component: Home },
+    { path: '/', name:'Home' , component: Home },
     { path: '/login', name: 'Login', component: Login },
     { path: '/invoices/', name: 'invoicesIndex', component: Invoices, meta: { requiresAuth: true } },
     { path: '/companies/', name: 'companiesIndex', component: Companies, meta: { requiresAuth: true } },
